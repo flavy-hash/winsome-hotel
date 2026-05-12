@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="48" viewBox="0 0 220 48" fill="none">
+  <!-- Mark: circle ring -->
+  <circle cx="24" cy="24" r="22" stroke="#F26B1F" stroke-width="1.6"/>
+  <!-- Mark: wave-W letterform -->
+  <path d="M10,19 C11.2,22 13.4,32 16,32 C18.6,32 20,21 24,20 C28,19 29.4,32 32,32 C34.6,32 36.8,22 38,19"
+        stroke="#F6F1E7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Wordmark: WINSOME -->
+  <text x="56" y="30"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="22"
+        font-weight="300"
+        fill="#F6F1E7"
+        letter-spacing="3">WINSOME</text>
+  <!-- Sub-tagline -->
+  <text x="57" y="42"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="8"
+        font-weight="400"
+        fill="rgba(246,241,231,0.45)"
+        letter-spacing="3">BAGAMOYO · TANZANIA</text>
+</svg>

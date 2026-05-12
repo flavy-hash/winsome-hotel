@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+  <!-- Outer ring -->
+  <circle cx="18" cy="18" r="16.5" stroke="#F26B1F" stroke-width="1.4"/>
+  <!-- Wave-W letterform (smooth cubic bezier curves) -->
+  <path d="M8,14 C9,16.5 11,24 13,24 C15,24 16,16 18,15 C20,14 21,24 23,24 C25,24 27,16.5 28,14"
+        stroke="#F6F1E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
