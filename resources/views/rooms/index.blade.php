@@ -140,9 +140,10 @@
   }
   .btn-read:hover { color: var(--cream); border-color: var(--cream); }
   .btn-reserve {
-    font-size: 13px; font-weight: 500; color: var(--ember);
-    border-bottom: 1px solid rgba(242,107,31,0.35);
-    padding-bottom: 2px; letter-spacing: 0.05em; text-transform: uppercase;
+    background: none; border: none; border-bottom: 1px solid rgba(242,107,31,0.35);
+    padding: 0 0 2px; margin: 0; cursor: pointer;
+    font-family: var(--body); font-size: 13px; font-weight: 500; color: var(--ember);
+    letter-spacing: 0.05em; text-transform: uppercase;
     transition: color 0.2s, border-color 0.2s;
   }
   .btn-reserve:hover { color: var(--ember-glow); border-color: var(--ember-glow); }
@@ -170,9 +171,57 @@
     nav ul { display: none; }
     .room-img { height: 220px; }
   }
+
+  /* ── BOOKING MODAL ── */
+  .bm-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 900;
+    background: rgba(11,18,32,0.8);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .bm-backdrop.open { display: flex; }
+  .bm-box {
+    background: #fff; border-radius: 20px; padding: 44px 40px;
+    max-width: 520px; width: 100%; position: relative;
+    max-height: 92vh; overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  }
+  .bm-close {
+    position: absolute; top: 18px; right: 20px;
+    background: none; border: none; font-size: 22px;
+    cursor: pointer; color: rgba(11,18,32,0.4); transition: color 0.2s;
+  }
+  .bm-close:hover { color: var(--ink); }
+  .bm-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ember); margin-bottom: 8px; font-weight: 500; }
+  .bm-title { font-family: var(--display); font-weight: 300; font-size: 30px; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 28px; }
+  .bm-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--sky); display: block; margin-bottom: 6px; font-weight: 600; }
+  .bm-input {
+    width: 100%; border: 1px solid rgba(11,18,32,0.15); border-radius: 8px;
+    padding: 12px 16px; font-family: var(--body); font-size: 15px;
+    outline: none; box-sizing: border-box; color: var(--ink);
+    transition: border-color 0.2s; appearance: none;
+  }
+  .bm-input:focus { border-color: var(--ember); }
+  .bm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .bm-field { margin-bottom: 16px; }
+  .bm-stepper { display: flex; align-items: center; border: 1px solid rgba(11,18,32,0.15); border-radius: 8px; overflow: hidden; }
+  .bm-stepper button { background: none; border: none; padding: 12px 16px; font-size: 18px; cursor: pointer; color: var(--ink); flex-shrink: 0; }
+  .bm-stepper input { flex: 1; border: none; text-align: center; font-family: var(--body); font-size: 15px; outline: none; padding: 0; }
+  .bm-error { background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #B91C1C; }
+  .bm-submit {
+    width: 100%; background: var(--ember); color: #fff;
+    border: none; border-radius: 100px; padding: 16px;
+    font-family: var(--body); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s; margin-top: 8px;
+  }
+  .bm-submit:hover { background: var(--ember-deep); }
+  .bm-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230B1220' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center;
+  }
+  @media (max-width: 560px) { .bm-box { padding: 32px 24px; } .bm-row { grid-template-columns: 1fr; } }
 </style>
 </head>
-<body>
+<body data-errors="{{ $errors->any() ? '1' : '0' }}">
 
 {{-- NAV --}}
 <nav>
@@ -189,7 +238,7 @@
     <li><a href="{{ url('/') }}#about">About</a></li>
     <li><a href="{{ url('/') }}#experiences">Experiences</a></li>
     <li><a href="{{ route('reviews.index') }}">Reviews</a></li>
-    <li><a href="{{ url('/') }}#book" class="nav-cta">Book a stay</a></li>
+    <li><a href="#" class="nav-cta" onclick="event.preventDefault();openBookingModal(null)">Book a stay</a></li>
   </ul>
 </nav>
 
@@ -248,11 +297,10 @@
           </div>
           <div class="room-actions">
             <a href="{{ route('rooms.show', $room) }}" class="btn-read">Read more</a>
-            <a href="{{ url('/') }}#book" class="btn-reserve"
-               data-room-id="{{ $room->id }}"
-               onclick="event.preventDefault();sessionStorage.setItem('preselect_room','{{ $room->id }}');window.location='{{ url('/') }}#book'">
+            <button class="btn-reserve" data-room-id="{{ $room->id }}"
+                    onclick="openBookingModal(this.dataset.roomId)">
               Reserve
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -275,6 +323,138 @@
     <a href="{{ url('/') }}">Back to homepage</a>
   </p>
 </footer>
+
+{{-- ── BOOKING MODAL ── --}}
+<div class="bm-backdrop" id="bookingModal">
+  <div class="bm-box" role="dialog" aria-modal="true" aria-labelledby="bm-title">
+    <button class="bm-close" id="bmClose" aria-label="Close">✕</button>
+
+    <div class="bm-eyebrow">Reserve your stay</div>
+    <h2 class="bm-title" id="bm-title">Complete your booking</h2>
+
+    @if($errors->any())
+    <div class="bm-error">
+      @foreach($errors->all() as $error)<div>· {{ $error }}</div>@endforeach
+    </div>
+    @endif
+
+    <form action="{{ route('booking.store') }}" method="POST" id="bm-form">
+      @csrf
+
+      {{-- Dates --}}
+      <div class="bm-row">
+        <div>
+          <label class="bm-label">Check-in *</label>
+          <input type="date" name="check_in" id="bm-check-in" value="{{ old('check_in') }}" required class="bm-input">
+        </div>
+        <div>
+          <label class="bm-label">Check-out *</label>
+          <input type="date" name="check_out" id="bm-check-out" value="{{ old('check_out') }}" required class="bm-input">
+        </div>
+      </div>
+
+      {{-- Guests --}}
+      <div class="bm-row">
+        <div>
+          <label class="bm-label">Adults *</label>
+          <div class="bm-stepper">
+            <button type="button" onclick="bmStep('bm-adults',-1)">−</button>
+            <input type="number" name="guests" id="bm-adults" value="{{ old('guests', 2) }}" min="1" max="20" required>
+            <button type="button" onclick="bmStep('bm-adults',1)">+</button>
+          </div>
+        </div>
+        <div>
+          <label class="bm-label">Children</label>
+          <div class="bm-stepper">
+            <button type="button" onclick="bmStep('bm-children',-1)">−</button>
+            <input type="number" name="children" id="bm-children" value="{{ old('children', 0) }}" min="0" max="20">
+            <button type="button" onclick="bmStep('bm-children',1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      {{-- Room --}}
+      <div class="bm-field">
+        <label class="bm-label">Room type</label>
+        <select name="room_id" id="bm-room-id" class="bm-input bm-select">
+          <option value="">— No preference —</option>
+          @foreach($rooms as $r)
+            <option value="{{ $r->id }}" {{ old('room_id') == $r->id ? 'selected' : '' }}>{{ $r->name }}</option>
+          @endforeach
+        </select>
+      </div>
+
+      {{-- Name --}}
+      <div class="bm-field">
+        <label class="bm-label">Full name *</label>
+        <input type="text" name="guest_name" value="{{ old('guest_name') }}" required
+               class="bm-input" placeholder="Your full name">
+      </div>
+
+      {{-- Email + Phone --}}
+      <div class="bm-row">
+        <div>
+          <label class="bm-label">Email *</label>
+          <input type="email" name="email" value="{{ old('email') }}" required
+                 class="bm-input" placeholder="you@example.com">
+        </div>
+        <div>
+          <label class="bm-label">Phone</label>
+          <input type="tel" name="phone" value="{{ old('phone') }}"
+                 class="bm-input" placeholder="+255 700 000 000">
+        </div>
+      </div>
+
+      {{-- Notes --}}
+      <div class="bm-field">
+        <label class="bm-label">Special requests</label>
+        <textarea name="notes" rows="2" class="bm-input"
+                  style="resize:vertical;" placeholder="Dietary needs, early check-in, etc.">{{ old('notes') }}</textarea>
+      </div>
+
+      <button type="submit" class="bm-submit">Send booking request →</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openBookingModal(roomId) {
+    if (roomId) document.getElementById('bm-room-id').value = roomId;
+    document.getElementById('bookingModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeBookingModal() {
+    document.getElementById('bookingModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('bmClose').addEventListener('click', closeBookingModal);
+  document.getElementById('bookingModal').addEventListener('click', function(e) {
+    if (e.target === this) closeBookingModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeBookingModal();
+  });
+
+  function bmStep(id, delta) {
+    var el = document.getElementById(id);
+    el.value = Math.min(parseInt(el.max)||20, Math.max(parseInt(el.min)||0, (parseInt(el.value)||0) + delta));
+  }
+
+  // Enforce check-out > check-in
+  document.getElementById('bm-check-in').addEventListener('change', function() {
+    var out = document.getElementById('bm-check-out');
+    if (out.value && out.value <= this.value) {
+      var next = new Date(this.value);
+      next.setDate(next.getDate() + 1);
+      out.value = next.toISOString().split('T')[0];
+    }
+    out.min = new Date(new Date(this.value).getTime() + 86400000).toISOString().split('T')[0];
+  });
+
+  // Re-open on validation error
+  if (document.body.dataset.errors === '1') openBookingModal(null);
+</script>
 
 </body>
 </html>
