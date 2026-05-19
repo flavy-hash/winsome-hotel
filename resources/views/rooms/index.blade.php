@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +24,7 @@
     --cream:      #F6F1E7;
     --cream-deep: #EBE3D2;
     --line:       rgba(255,255,255,0.07);
-    --display:    'Fraunces', Georgia, serif;
+    --display:    'Poppins', system-ui, sans-serif;
     --body:       'Inter Tight', system-ui, sans-serif;
   }
   body {
@@ -48,8 +48,11 @@
     padding: 0 48px; height: 68px;
     border-bottom: 1px solid var(--line);
   }
-  .brand-logo { height: 32px; width: auto; display: block; }
-  .brand-text { font-family: var(--display); font-size: 20px; font-weight: 400; color: var(--cream); }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand-logo { height: 40px; width: auto; display: block; flex-shrink: 0; background: #fff; padding: 3px 6px; border-radius: 6px; }
+  .brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .brand-name { font-family: var(--display); font-weight: 400; font-size: 17px; letter-spacing: -0.01em; color: var(--cream); line-height: 1.1; }
+  .brand-tagline { font-family: var(--body); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember-glow); font-weight: 500; line-height: 1; }
   nav ul { display: flex; gap: 32px; list-style: none; font-size: 13px; letter-spacing: 0.04em; }
   nav ul a { color: rgba(246,241,231,0.6); transition: color 0.2s; }
   nav ul a:hover { color: var(--cream); }
@@ -131,6 +134,7 @@
   }
   .room-price { font-family: var(--display); font-size: 28px; font-weight: 300; color: var(--ember); }
   .room-price small { font-family: var(--body); font-size: 13px; color: rgba(246,241,231,0.4); margin-left: 4px; }
+  .price-tzs { display: block; font-family: var(--body); font-size: 12px; color: rgba(246,241,231,0.45); margin-top: 2px; }
   .room-actions { display: flex; gap: 16px; align-items: center; }
   .btn-read {
     font-size: 13px; font-weight: 500; color: rgba(246,241,231,0.6);
@@ -165,11 +169,69 @@
   footer a { color: rgba(246,241,231,0.45); transition: color 0.2s; }
   footer a:hover { color: var(--ember); }
 
+  /* ── Tablet ── */
   @media (max-width: 960px) {
     nav, .page-hero, .page-wrap { padding-left: 24px; padding-right: 24px; }
-    .rooms-grid { grid-template-columns: 1fr; }
     nav ul { display: none; }
+    .rooms-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
     .room-img { height: 220px; }
+    .bm-box { padding: 36px 28px; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    nav, .page-hero, .page-wrap { padding-left: 16px; padding-right: 16px; }
+    nav { height: auto; padding-top: 14px; padding-bottom: 14px; }
+    .page-hero { padding-top: 80px; padding-bottom: 36px; }
+    .rooms-grid { grid-template-columns: 1fr; gap: 16px; }
+    .room-img { height: 200px; }
+    .room-content { padding: 18px 16px; }
+    .room-price { font-size: 22px; }
+    .room-actions { gap: 10px; }
+    .btn-read, .btn-reserve { font-size: 12px; padding: 9px 14px; }
+    .filter-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .filter-bar select, .filter-bar input { width: 100%; }
+    .bm-backdrop { padding: 12px; }
+    .bm-box { padding: 28px 20px; border-radius: 16px; }
+    .bm-title { font-size: 24px; margin-bottom: 20px; }
+  }
+
+  /* ── Small phones ── */
+  @media (max-width: 400px) {
+    nav, .page-hero, .page-wrap { padding-left: 12px; padding-right: 12px; }
+    .room-img { height: 180px; }
+    .bm-box { padding: 20px 16px; }
+  }
+
+  /* ── Bottom Navigation ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+    z-index: 2000;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+  .bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: rgba(246,241,231,0.55); font-size: 10px; font-family: var(--body);
+    letter-spacing: 0.04em; text-decoration: none;
+    padding: 6px 8px; border-radius: 8px; transition: color 0.2s; min-width: 52px;
+  }
+  .bottom-nav a svg { width: 20px; height: 20px; }
+  .bottom-nav a:hover, .bottom-nav a.active { color: var(--ember-glow); }
+  .bottom-nav a.bn-book {
+    color: #fff; background: var(--ember);
+    border-radius: 10px; padding: 6px 12px;
+  }
+  .bottom-nav a.bn-book:hover { background: var(--ember-glow); }
+  @media (min-width: 768px) { .bottom-nav { display: none !important; } }
+  @media (max-width: 640px) {
+    body { padding-bottom: 72px; }
+    .bottom-nav { display: block; }
   }
 
   /* ── BOOKING MODAL ── */
@@ -225,17 +287,20 @@
 
 {{-- NAV --}}
 <nav>
-  <a href="{{ url('/') }}">
+  <a href="{{ url('/') }}" class="brand">
     @php $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])->first(fn($f) => file_exists(public_path("images/{$f}"))); @endphp
     @if($logoFile)
       <img src="{{ asset('images/'.$logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @else
-      <span class="brand-text">Winsome</span>
     @endif
+    <div class="brand-text">
+      <span class="brand-name">Winsome Hotel</span>
+      <span class="brand-tagline">Charm, Luxury, Comfort</span>
+    </div>
   </a>
   <ul>
     <li><a href="{{ url('/') }}#rooms">Rooms</a></li>
     <li><a href="{{ url('/') }}#about">About</a></li>
+    <li><a href="{{ route('location') }}">Location</a></li>
     <li><a href="{{ url('/') }}#experiences">Experiences</a></li>
     <li><a href="{{ route('reviews.index') }}">Reviews</a></li>
     <li><a href="#" class="nav-cta" onclick="event.preventDefault();openBookingModal(null)">Book a stay</a></li>
@@ -294,6 +359,9 @@
         <div class="room-footer">
           <div class="room-price">
             ${{ number_format($room->price_per_night, 0) }}<small>/ night</small>
+            @if($room->price_per_night_tzs)
+              <span class="price-tzs">TZS {{ number_format($room->price_per_night_tzs, 0) }}</span>
+            @endif
           </div>
           <div class="room-actions">
             <a href="{{ route('rooms.show', $room) }}" class="btn-read">Read more</a>
@@ -455,6 +523,32 @@
   // Re-open on validation error
   if (document.body.dataset.errors === '1') openBookingModal(null);
 </script>
+
+<!-- BOTTOM NAV (mobile) -->
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="{{ url('/') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="{{ route('rooms.index') }}" class="active">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Rooms
+    </a>
+    <a href="javascript:void(0)" class="bn-book" onclick="openBookingModal(null)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Book
+    </a>
+    <a href="{{ route('location') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Location
+    </a>
+    <a href="{{ route('reviews.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Reviews
+    </a>
+  </div>
+</div>
 
 </body>
 </html>
