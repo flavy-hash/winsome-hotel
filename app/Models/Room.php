@@ -12,6 +12,7 @@ class Room extends Model
         'tag',
         'description',
         'price_per_night',
+        'price_per_night_tzs',
         'size_sqm',
         'bed_type',
         'max_guests',
@@ -25,6 +26,7 @@ class Room extends Model
         'features' => 'array',
         'gallery'  => 'array',
         'price_per_night' => 'decimal:2',
+        'price_per_night_tzs' => 'decimal:2',
         'is_available' => 'boolean',
     ];
 
