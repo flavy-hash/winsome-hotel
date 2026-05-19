@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -24,12 +24,12 @@
     --line: rgba(11, 18, 32, 0.12);
     --line-soft: rgba(11, 18, 32, 0.06);
 
-    --display: 'Fraunces', Georgia, serif;
+    --display: 'Poppins', system-ui, sans-serif;
     --body: 'Inter Tight', system-ui, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
   body {
     background: var(--cream);
     color: var(--ink);
@@ -38,6 +38,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    max-width: 100%;
   }
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
@@ -45,12 +46,15 @@
   /* ============ GRAIN OVERLAY ============ */
   body::before {
     content: '';
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
     pointer-events: none;
     z-index: 9999;
     opacity: 0.5;
     mix-blend-mode: multiply;
+    overflow: hidden;
   }
 
   /* ============ NAV ============ */
@@ -69,18 +73,39 @@
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
   .brand {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: 22px;
-    letter-spacing: -0.01em;
-    color: var(--cream);
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+    isolation: isolate;
+    mix-blend-mode: normal;
   }
   .brand-logo {
-    height: 34px;
+    height: 44px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+    flex-shrink: 0;
+    background: #fff;
+    padding: 3px 6px;
+    border-radius: 6px;
+  }
+  .brand-text {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .brand-name {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+  .brand-tagline {
+    font-family: var(--body);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember-glow);
+    font-weight: 500;
+    line-height: 1;
   }
   nav ul {
     display: flex; gap: 36px;
@@ -455,26 +480,81 @@
     color: var(--ink);
   }
   .about p.body { color: rgba(11, 18, 32, 0.7); margin-bottom: 32px; }
-  .about-stats {
+  .about-usp {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    padding-top: 32px;
-    border-top: 1px solid var(--line);
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+    margin-bottom: 28px;
   }
-  .about-stat strong {
-    font-family: var(--display);
-    font-size: 40px;
-    font-weight: 400;
-    color: var(--sky);
-    display: block;
-    line-height: 1;
+  .usp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(11, 18, 32, 0.75);
+    line-height: 1.4;
   }
-  .about-stat span {
-    font-size: 12px;
-    color: rgba(11, 18, 32, 0.6);
+  .usp-item svg {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--ember);
+  }
+  .about-guests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .guest-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    color: rgba(11, 18, 32, 0.65);
+    border: 1px solid rgba(11, 18, 32, 0.2);
+    border-radius: 100px;
+    padding: 4px 12px;
+  }
+  .about-mv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 28px;
+  }
+  .mv-card {
+    background: rgba(11, 18, 32, 0.04);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid rgba(11, 18, 32, 0.08);
+  }
+  .mv-icon {
+    width: 36px; height: 36px;
+    background: var(--ember);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .mv-icon svg {
+    width: 18px; height: 18px;
+    color: #fff;
+  }
+  .mv-card strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .mv-card p {
+    font-size: 13px;
+    color: rgba(11, 18, 32, 0.65);
+    line-height: 1.6;
+    margin: 0;
   }
 
   /* ============ ROOMS ============ */
@@ -555,6 +635,14 @@
     font-weight: 500;
     color: var(--ember-glow);
   }
+  .price-tzs {
+    display: block;
+    font-family: var(--body);
+    font-size: 12px;
+    color: rgba(246, 241, 231, 0.45);
+    font-weight: 400;
+    margin-top: 2px;
+  }
   .room-price small {
     font-family: var(--body);
     font-size: 12px;
@@ -572,6 +660,83 @@
     transition: color 0.2s;
   }
   .room-link:hover { color: var(--ember); }
+
+  /* ============ FACILITIES ============ */
+  .facilities { background: var(--cream); color: var(--ink); }
+  .facilities .section-title { color: var(--ink); }
+  .facilities .section-title em { color: var(--ember); }
+
+  .fac-chips {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 56px;
+  }
+  .fac-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 13px; font-weight: 500;
+  }
+  .fac-chip svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--ember-glow); }
+
+  .fac-highlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  .fac-highlight {
+    background: rgba(11,18,32,0.04);
+    border: 1px solid rgba(11,18,32,0.1);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .fac-hl-icon {
+    width: 44px; height: 44px;
+    background: var(--ember);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .fac-hl-icon svg { width: 22px; height: 22px; color: #fff; }
+  .fac-highlight h3 {
+    font-family: var(--display);
+    font-size: 22px; font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .fac-highlight p { font-size: 14px; color: rgba(11,18,32,0.7); line-height: 1.7; margin: 0; }
+
+  .fac-attractions {
+    border-top: 1px solid rgba(11,18,32,0.12);
+    padding-top: 40px;
+  }
+  .fac-attractions h3 {
+    font-family: var(--display);
+    font-size: 20px; font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .fac-attractions h3 svg { width: 20px; height: 20px; color: var(--ember); }
+  .fac-attr-list {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    list-style: none; padding: 0; margin: 0;
+  }
+  .fac-attr-list li {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff;
+    border: 1px solid rgba(11,18,32,0.12);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px; color: rgba(11,18,32,0.75);
+  }
+  .fac-attr-list li::before {
+    content: '→';
+    color: var(--ember);
+    font-weight: 600;
+  }
 
   /* ============ EXPERIENCES (PULL QUOTE) ============ */
   .quote {
@@ -717,18 +882,19 @@
     display: flex; flex-direction: column; gap: 14px;
     border: 1px solid rgba(11,18,32,0.08);
     transition: box-shadow 0.25s, transform 0.25s;
+    overflow: hidden; min-width: 0;
   }
   .rv-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(11,18,32,0.11); }
   /* Card head row */
-  .rv-head { display: flex; align-items: center; gap: 14px; }
+  .rv-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .rv-avatar-init {
     width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
     background: #EAEAEA; color: var(--ink);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--display); font-size: 19px; font-weight: 500;
   }
-  .rv-info { flex: 1; min-width: 0; }
-  .rv-name { font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.2; }
+  .rv-info { flex: 1; min-width: 0; overflow: hidden; }
+  .rv-name { font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.2; overflow-wrap: break-word; word-break: break-word; }
   .rv-room { display: block; margin-top: 3px; font-size: 12px; color: rgba(11,18,32,0.45); }
   .rv-room strong { color: var(--ink); font-weight: 600; }
   .rv-right { text-align: right; flex-shrink: 0; }
@@ -740,10 +906,12 @@
   .rv-title {
     font-family: var(--display); font-size: 17px; font-weight: 400;
     color: var(--ink); line-height: 1.3;
+    overflow-wrap: break-word; word-break: break-word;
   }
   .rv-body {
     font-size: 14px; color: #C06000;
     line-height: 1.75; flex: 1;
+    overflow-wrap: break-word; word-break: break-word;
   }
   .rooms-cta-wrap { text-align: center; margin-top: 56px; }
   .btn-all-rooms {
@@ -821,10 +989,11 @@
   }
   .footer-brand {
     font-family: var(--display);
-    font-size: 32px;
+    font-size: 20px;
     color: var(--cream);
-    margin-bottom: 16px;
     font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
   .footer-col h5 {
     font-size: 12px;
@@ -838,7 +1007,72 @@
     list-style: none;
     display: flex; flex-direction: column; gap: 12px;
   }
+  .footer-tagline {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ember-glow);
+    margin-bottom: 4px;
+  }
+  .footer-col ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .fc-icon {
+    width: 15px; height: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--ember);
+  }
+  .fc-icon--wa { color: #25d366; }
   .footer-col a:hover { color: var(--ember-glow); }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 58px; height: 58px;
+    background: #25d366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    z-index: 9999;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+  }
+  .wa-float svg { width: 30px; height: 30px; color: #fff; }
+  .wa-float:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 32px rgba(37,211,102,0.55);
+  }
+  .wa-tooltip {
+    position: absolute;
+    right: 68px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 6px 14px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .wa-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px; top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right: none;
+    border-left-color: var(--ink);
+  }
+  .wa-float:hover .wa-tooltip { opacity: 1; }
   .footer-bottom {
     max-width: 1280px;
     margin: 0 auto;
@@ -850,6 +1084,8 @@
   }
 
   /* ============ RESPONSIVE ============ */
+
+  /* ── Tablet (960px) ── */
   @media (max-width: 960px) {
     nav, section { padding-left: 24px; padding-right: 24px; }
     nav ul { display: none; }
@@ -860,22 +1096,147 @@
     }
     .hero-visual { max-height: 420px; }
     .booking-bar { padding: 0 24px; }
-    .booking-inner {
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .booking-inner { grid-template-columns: 1fr 1fr; gap: 8px; }
     .booking-cta { grid-column: span 2; padding: 16px; }
     .booking-field { border-right: none; }
     .about { grid-template-columns: 1fr; gap: 48px; }
-    .rooms-grid { grid-template-columns: 1fr; }
-    .exp-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
-    }
+    .fac-highlight-grid { grid-template-columns: 1fr; }
+    .about-mv { grid-template-columns: 1fr; }
+    .about-usp { grid-template-columns: 1fr; }
+    .rooms-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+    .exp-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
     .exp-card.tall { grid-row: auto; grid-column: span 2; min-height: 220px; }
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
     .footer-bottom { flex-direction: column; gap: 12px; }
     .rv-grid { grid-template-columns: 1fr; }
+    .about-visual { aspect-ratio: 3/2; }
+    .reviews-home .container { padding: 0 24px; }
+  }
+
+  /* ── Bottom Navigation ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+    z-index: 2000;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .bottom-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: rgba(246,241,231,0.55);
+    font-size: 10px;
+    font-family: var(--body);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: color 0.2s;
+    min-width: 52px;
+  }
+  .bottom-nav a svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .bottom-nav a:hover,
+  .bottom-nav a.active { color: var(--ember-glow); }
+  .bottom-nav a.bn-book {
+    color: #fff;
+    background: var(--ember);
+    border-radius: 10px;
+    padding: 6px 12px;
+  }
+  .bottom-nav a.bn-book:hover { background: var(--ember-glow); }
+
+  @media (min-width: 768px) {
+    .bottom-nav { display: none !important; }
+  }
+
+  /* ── Mobile (640px) ── */
+  @media (max-width: 640px) {
+    body { padding-bottom: 72px; }
+    .bottom-nav { display: block; }
+    nav ul { display: none; }
+    nav, section { padding-left: 16px; padding-right: 16px; }
+    nav { padding-top: 14px; padding-bottom: 14px; }
+    .brand-logo { height: 34px; padding: 2px 5px; }
+    .brand-name { font-size: 15px; }
+    .brand-tagline { font-size: 8px; letter-spacing: 0.12em; }
+
+    .hero {
+      padding: 88px 16px 40px;
+      gap: 28px;
+    }
+    .hero-visual { max-height: 280px; border-radius: 12px; }
+    .hero-eyebrow { font-size: 10px; }
+    .lead { font-size: 14px; }
+    .hero-actions { flex-direction: column; gap: 12px; }
+    .hero-actions .btn-primary,
+    .hero-actions .btn-ghost { width: 100%; text-align: center; justify-content: center; }
+    .hero-stat { display: none; }
+
+    .booking-bar { padding: 0 16px; margin-top: -1px; }
+    .booking-inner { grid-template-columns: 1fr; gap: 0; }
+    .booking-cta { grid-column: span 1; margin-top: 8px; }
+    .booking-field { border-bottom: 1px solid rgba(11,18,32,0.08); }
+
+    section { padding-top: 56px; padding-bottom: 56px; }
+
+    .about { gap: 32px; }
+    .about-visual { display: none; }
+    .about-usp { grid-template-columns: 1fr; gap: 10px; }
+    .about-mv { grid-template-columns: 1fr; gap: 12px; }
+    .about-guests { gap: 6px; }
+    .guest-tag { font-size: 10px; padding: 3px 10px; }
+
+    .rooms-grid { grid-template-columns: 1fr; gap: 20px; }
+
+    .fac-chips { gap: 8px; }
+    .fac-chip { font-size: 12px; padding: 10px 14px; }
+    .fac-highlight-grid { grid-template-columns: 1fr; gap: 12px; }
+    .fac-attr-list { gap: 8px; }
+    .fac-attr-list li { font-size: 12px; padding: 8px 12px; }
+
+    .exp-grid { grid-template-columns: 1fr; }
+    .exp-card.tall { grid-column: span 1; min-height: 200px; }
+    .exp-card { min-height: 180px; }
+
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    footer { padding: 48px 16px 24px; }
+
+    .quote { padding: 48px 16px; }
+    blockquote { font-size: clamp(20px, 5vw, 28px); }
+
+    .rv-grid { grid-template-columns: 1fr; gap: 14px; }
+    .rv-card { padding: 18px 16px; border-radius: 14px; }
+    .cta-inner { padding: 48px 16px; }
+    .cta-inner h2 { font-size: clamp(28px, 7vw, 48px); }
+
+    .reviews-home .container { padding: 0 16px; }
+  }
+
+  /* ── Small phones (400px) ── */
+  @media (max-width: 400px) {
+    .hero { padding: 80px 12px 36px; }
+    nav, section { padding-left: 12px; padding-right: 12px; }
+    .fac-chip { font-size: 11px; padding: 8px 10px; }
+    .mv-card { padding: 16px; }
+    .fac-highlight { padding: 20px; }
+    .reviews-home .container { padding: 0 12px; }
+  }
+
+  /* ── Booking modal mobile ── */
+  @media (max-width: 640px) {
+    #booking-modal { padding: 12px !important; }
+    #booking-modal > div { padding: 28px 20px !important; border-radius: 16px !important; }
   }
   .modal-select {
     width:100%;border:1px solid rgba(11,18,32,0.15);border-radius:8px;
@@ -896,14 +1257,18 @@
         ->first(fn($f) => file_exists(public_path("images/{$f}")));
     @endphp
     @if($logoFile)
-      <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @else
-      <span style="font-family:var(--display);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--cream);">Winsome</span>
+      <img src="{{ asset('images/'.$logoFile) }}" alt="Winsome Hotel" class="brand-logo">
     @endif
+    <div class="brand-text">
+      <span class="brand-name">Winsome Hotel</span>
+      <span class="brand-tagline">Charm, Luxury, Comfort</span>
+    </div>
   </a>
-  <ul>
+  <ul id="nav-links">
     <li><a href="#rooms">Rooms</a></li>
     <li><a href="#about">The hotel</a></li>
+    <li><a href="#facilities">Facilities</a></li>
+    <li><a href="{{ route('location') }}">Location</a></li>
     <li><a href="#experiences">Experiences</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1134,25 +1499,60 @@
       @endif
       <div class="about-temp">24°</div>
     </div>
-    <div class="badge-floating">★ Relais & Châteaux 2026</div>
+    <div class="badge-floating">★ Est. 2010 · Arusha</div>
   </div>
   <div>
-    <div class="section-eyebrow">A house on the shore</div>
-    <h2 class="section-title">A hotel built around <em>the things that matter</em>.</h2>
-    <p class="body-lead">Winsome began as a single coral-stone house in Arusha, restored over four years by a family who believed hospitality should feel like coming home — not checking in.</p>
-    <p class="body">Today, twenty-four suites face the Indian Ocean. There is a pool that catches the sunset, a library of books left behind by guests, and a kitchen that opens at six for early swimmers and stays open late for the talkative.</p>
-    <div class="about-stats">
-      <div class="about-stat">
-        <strong>24</strong>
-        <span>Suites</span>
+    <div class="section-eyebrow">Our Story</div>
+    <h2 class="section-title">A hotel with <em>views of two peaks</em>.</h2>
+    <p class="body-lead">Winsome Hotel was born out of an idea conceived in 2010 by Nemes Victor Massawe, the sole proprietor of the facility.</p>
+    <p class="body">The vision is to create a unique hotel providing comfortable accommodation to tourists and business travellers at affordable prices. Enjoy spectacular views of both Mount Meru and Mount Kilimanjaro — situated 3 km off the Arusha Bypass Road, 13 km from Arusha Airport, and 11 km from Arusha city centre.</p>
+
+    <!-- Unique Selling Points -->
+    <div class="about-usp">
+      <div class="usp-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l4-8 4 4 3-6 4 10"/><circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span>Twin-peak views of Meru &amp; Kilimanjaro</span>
       </div>
-      <div class="about-stat">
-        <strong>9.6</strong>
-        <span>Guest score</span>
+      <div class="usp-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Peaceful location away from city bustle</span>
       </div>
-      <div class="about-stat">
-        <strong>2 km</strong>
-        <span>Private beach</span>
+      <div class="usp-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Maasai culture &amp; local community access</span>
+      </div>
+      <div class="usp-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Highly trained staff &amp; exceptional service</span>
+      </div>
+    </div>
+
+    <!-- Target Guests -->
+    <div class="about-guests">
+      <span class="guest-tag">Business Travelers</span>
+      <span class="guest-tag">Tourists &amp; Leisure</span>
+      <span class="guest-tag">Local Residents</span>
+      <span class="guest-tag">Families</span>
+      <span class="guest-tag">Couples</span>
+      <span class="guest-tag">Groups &amp; Events</span>
+      <span class="guest-tag">International Visitors</span>
+    </div>
+
+    <!-- Mission & Vision -->
+    <div class="about-mv">
+      <div class="mv-card">
+        <div class="mv-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <strong>Vision</strong>
+        <p>To become the hotel of choice in Arusha, providing the best and most affordable services.</p>
+      </div>
+      <div class="mv-card">
+        <div class="mv-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <strong>Mission</strong>
+        <p>To provide excellent services that make every customer feel truly delighted and at home.</p>
       </div>
     </div>
   </div>
@@ -1190,7 +1590,12 @@
           </div>
           @endif
           <div class="room-footer">
-            <div class="room-price">${{ number_format($room->price_per_night, 0) }}<small>/ night</small></div>
+            <div class="room-price">
+            ${{ number_format($room->price_per_night, 0) }}<small>/ night</small>
+            @if($room->price_per_night_tzs)
+              <span class="price-tzs">TZS {{ number_format($room->price_per_night_tzs, 0) }}</span>
+            @endif
+          </div>
             <div style="display:flex;gap:18px;align-items:center;">
               <a href="{{ route('rooms.show', $room) }}" class="room-link">
                 Read more
@@ -1223,6 +1628,79 @@
       </a>
     </div>
 
+  </div>
+</section>
+
+<!-- ====== FACILITIES ====== -->
+<section class="facilities" id="facilities">
+  <div class="container">
+    <div class="section-eyebrow">What we offer</div>
+    <h2 class="section-title">Everything you need <em>under one roof</em>.</h2>
+
+    <!-- Facility Chips -->
+    <div class="fac-chips">
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+        Restaurant
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22H5a2 2 0 0 1-2-2V7l3-4h11l3 4v13a2 2 0 0 1-2 2h-3"/><line x1="12" y1="22" x2="12" y2="11"/><path d="M3 7h18"/></svg>
+        Bar &amp; Lounge
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Conference Rooms
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Parking
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V11a9 9 0 0 1 18 0v11"/><path d="M5 11h14"/><path d="M9 22v-4h6v4"/></svg>
+        Laundry
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        24-hour Reception
+      </div>
+      <div class="fac-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>
+        WiFi Throughout
+      </div>
+    </div>
+
+    <!-- Restaurant & Conference highlights -->
+    <div class="fac-highlight-grid">
+      <div class="fac-highlight">
+        <div class="fac-hl-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6h4v-1a2 2 0 0 1 2-2z"/><path d="M18 22v-4"/></svg>
+        </div>
+        <h3>Restaurant</h3>
+        <p>Winsome Restaurant serves a rich selection of local and international dishes. Savour classics like Ugali with chicken or the beloved fish Makange — hearty meals prepared with fresh local ingredients.</p>
+      </div>
+      <div class="fac-highlight">
+        <div class="fac-hl-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Conference &amp; Board Room</h3>
+        <p>Our fully equipped Board Room comfortably accommodates up to <strong>20 people</strong> — ideal for corporate meetings, team retreats, and private business events.</p>
+      </div>
+    </div>
+
+    <!-- Nearby Attractions -->
+    <div class="fac-attractions">
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Nearby Attractions
+      </h3>
+      <ul class="fac-attr-list">
+        <li>Miserani Snake Park</li>
+        <li>Napulu Waterfall</li>
+        <li>Cultural Heritage Art Gallery</li>
+        <li>Arusha City Walk</li>
+        <li>Arusha National Park</li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -1399,50 +1877,95 @@
 <footer id="contact">
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">
-        @php
-          $logoFile = $logoFile ?? collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
-            ->first(fn($f) => file_exists(public_path("images/{$f}")));
-        @endphp
+      @php
+        $logoFile = $logoFile ?? collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
+          ->first(fn($f) => file_exists(public_path("images/{$f}")));
+      @endphp
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
         @if($logoFile)
-          <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel" style="height:40px;width:auto;display:block;margin-bottom:16px;filter:brightness(0) invert(1);">
-        @else
-          Winsome
+          <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel"
+               style="height:44px;width:auto;display:block;flex-shrink:0;background:#fff;padding:3px 6px;border-radius:6px;">
         @endif
+        <div>
+          <div class="footer-brand">Winsome Hotel</div>
+          <p class="footer-tagline" style="margin-top:2px;">Charm, Luxury, Comfort</p>
+        </div>
       </div>
-      <p style="font-size: 14px; line-height: 1.7; max-width: 320px;">A boutique hotel on the Tanzanian coast. Twenty-four suites, one shore, a thousand quiet hours.</p>
+      <p style="font-size: 13px; line-height: 1.7; max-width: 300px; margin-top: 10px;">A business hotel in the heart of Arusha offering comfortable accommodation with breathtaking views of Mount Meru and Mount Kilimanjaro.</p>
     </div>
     <div class="footer-col">
-      <h5>Visit</h5>
+      <h5>Visit Us</h5>
       <ul>
-        <li>East Africa Road</li>
-        <li>Njiro, Arusha</li>
-        <li>+255 700 000 000</li>
+        <li>
+          <svg class="fc-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Mkonoo, Terat, Arusha CBD, Arusha
+        </li>
+        <li>
+          <svg class="fc-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.07 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg>
+          <a href="tel:+255793411998">+255 793 411 998</a>
+        </li>
+        <li>
+          <svg class="fc-icon fc-icon--wa" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+          <a href="https://wa.me/255793411998" target="_blank" rel="noopener">WhatsApp Us</a>
+        </li>
       </ul>
     </div>
     <div class="footer-col">
       <h5>Discover</h5>
       <ul>
         <li><a href="#rooms">Rooms</a></li>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#about">Our Story</a></li>
         <li><a href="#experiences">Experiences</a></li>
-        <li><a href="#">Dining</a></li>
-        <li><a href="#">Press</a></li>
+        <li><a href="#book">Book a Stay</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h5>Follow</h5>
+      <h5>Connect</h5>
       <ul>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">Pinterest</a></li>
-        <li><a href="#">Newsletter</a></li>
+        <li><a href="https://www.instagram.com/winsome_hotel_arusha/">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="https://wa.me/255793411998" target="_blank" rel="noopener">WhatsApp</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2026 Winsome Hotel · All rights reserved</span>
-    <span>Crafted in Tanzania</span>
+    <span>Business Hotel · Est. 2026 · Arusha, Tanzania</span>
   </div>
 </footer>
+
+<!-- ====== BOTTOM NAVIGATION (mobile) ====== -->
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="{{ url('/') }}" class="active">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="#rooms">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Rooms
+    </a>
+    <a href="#book" class="bn-book">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Book
+    </a>
+    <a href="{{ route('location') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Location
+    </a>
+    <a href="#contact">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.07 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16z"/></svg>
+      Contact
+    </a>
+  </div>
+</div>
+
+<!-- ====== WHATSAPP FLOATING BUTTON ====== -->
+<a href="https://wa.me/255793411998" target="_blank" rel="noopener" class="wa-float" aria-label="Chat with us on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+  <span class="wa-tooltip">Chat with us</span>
+</a>
 
 <script>
   // Nav scroll
