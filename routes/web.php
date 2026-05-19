@@ -22,5 +22,7 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
 Route::post('/rooms/{room}/reviews', [ReviewController::class, 'store'])->name('rooms.reviews.store');
 
+Route::get('/location', fn() => view('location'))->name('location');
+
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/confirmation/{booking}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
