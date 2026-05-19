@@ -125,8 +125,9 @@
       <p class="checklist-title">Good to know before you arrive</p>
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
         @foreach([
-          ['icon' => '🕐', 'text' => 'Check-in from <strong>2:00 PM</strong>. Early check-in available on request (subject to availability).'],
-          ['icon' => '🕚', 'text' => 'Check-out by <strong>11:00 AM</strong>. Late check-out available for an additional fee.'],
+          ['icon' => '🕐', 'text' => 'Check-in from <strong>1:30 PM</strong>. Early check-in available on request (subject to availability).'],
+          ['icon' => '🕙', 'text' => 'Check-out by <strong>10:30 PM</strong>.'],
+          ['icon' => '📋', 'text' => 'Cancellation: <strong>100% refund</strong> if cancelled 7+ days before arrival · <strong>50% refund</strong> for 3–6 days · <strong>No refund</strong> under 3 days.'],
           ['icon' => '✈️', 'text' => 'Complimentary airport transfer for stays of 3+ nights. Please share your flight details at least 24 hours prior.'],
           ['icon' => '📶', 'text' => 'Complimentary Wi-Fi throughout the hotel and on the beach deck.'],
         ] as $item)
