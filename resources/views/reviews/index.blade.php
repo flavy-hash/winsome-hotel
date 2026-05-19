@@ -6,11 +6,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
   :root {
     --ink:        #0B1220;
     --ink-soft:   #131C2E;
@@ -24,14 +24,15 @@
     --cream-deep: #EBE3D2;
     --line-dark:  rgba(255,255,255,0.07);
     --line-light: rgba(11,18,32,0.09);
-    --display:    'Fraunces', Georgia, serif;
+    --display:    'Poppins', system-ui, sans-serif;
     --body:       'Inter Tight', system-ui, sans-serif;
   }
-  body { background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100%; }
   body::before {
-    content: ''; position: fixed; inset: 0;
+    content: ''; position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
-    pointer-events: none; z-index: 9999; opacity: 0.4; mix-blend-mode: multiply;
+    pointer-events: none; z-index: 9999; opacity: 0.4; mix-blend-mode: multiply; overflow: hidden;
   }
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
@@ -44,8 +45,11 @@
     padding: 0 48px; height: 68px;
     border-bottom: 1px solid var(--line-dark);
   }
-  .brand-logo { height: 32px; width: auto; display: block; }
-  .brand-text { font-family: var(--display); font-size: 20px; font-weight: 400; color: var(--cream); }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand-logo { height: 40px; width: auto; display: block; flex-shrink: 0; background: #fff; padding: 3px 6px; border-radius: 6px; }
+  .brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .brand-name { font-family: var(--display); font-weight: 400; font-size: 17px; letter-spacing: -0.01em; color: var(--cream); line-height: 1.1; }
+  .brand-tagline { font-family: var(--body); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember-glow); font-weight: 500; line-height: 1; }
   nav ul { display: flex; gap: 32px; list-style: none; font-size: 13px; letter-spacing: 0.04em; }
   nav ul a { color: rgba(246,241,231,0.6); transition: color 0.2s; }
   nav ul a:hover { color: var(--cream); }
@@ -141,23 +145,24 @@
     border: 1px solid rgba(11,18,32,0.08);
     display: flex; flex-direction: column; gap: 14px;
     transition: box-shadow 0.25s, transform 0.25s;
+    overflow: hidden; min-width: 0;
   }
   .rv-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(11,18,32,0.11); }
 
   /* Head row: avatar | name+room | stars+date */
-  .rv-head { display: flex; align-items: center; gap: 14px; }
+  .rv-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .rv-avatar {
-    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
     object-fit: cover; border: 2px solid rgba(11,18,32,0.08);
   }
   .rv-avatar-init {
-    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
     background: #EAEAEA; color: var(--ink);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--display); font-size: 19px; font-weight: 500;
+    font-family: var(--display); font-size: 18px; font-weight: 500;
   }
-  .rv-info { flex: 1; min-width: 0; }
-  .rv-name { font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.2; }
+  .rv-info { flex: 1; min-width: 0; overflow: hidden; }
+  .rv-name { font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.2; overflow-wrap: break-word; word-break: break-word; }
   .rv-room-tag {
     display: block; margin-top: 3px;
     font-size: 12px; color: rgba(11,18,32,0.45);
@@ -169,8 +174,8 @@
   .rv-date { font-size: 12px; color: rgba(11,18,32,0.35); margin-top: 5px; }
 
   /* Content */
-  .rv-title { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--ink); line-height: 1.3; }
-  .rv-body { font-size: 14px; color: #C06000; line-height: 1.75; flex: 1; }
+  .rv-title { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--ink); line-height: 1.3; overflow-wrap: break-word; word-break: break-word; }
+  .rv-body { font-size: 14px; color: #C06000; line-height: 1.75; flex: 1; overflow-wrap: break-word; word-break: break-word; }
   .rv-sub {
     display: flex; gap: 16px; padding-top: 12px;
     border-top: 1px solid rgba(11,18,32,0.06); flex-wrap: wrap;
@@ -295,18 +300,87 @@
   footer a { color: rgba(246,241,231,0.5); transition: color 0.2s; }
   footer a:hover { color: var(--ember); }
 
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    display: none;
+    position: fixed; top: auto; bottom: 0; left: 0; right: 0;
+    background: var(--ink-soft);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+    z-index: 2000;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+  .bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: rgba(246,241,231,0.55); font-size: 10px; font-family: var(--body);
+    letter-spacing: 0.04em; text-decoration: none;
+    padding: 6px 8px; border-radius: 8px; transition: color 0.2s; min-width: 52px;
+  }
+  .bottom-nav a svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .bottom-nav a:hover, .bottom-nav a.active { color: var(--ember-glow); }
+  .bottom-nav a.bn-book { color: #fff; background: var(--ember); border-radius: 10px; padding: 6px 12px; }
+  .bottom-nav a.bn-book:hover { background: var(--ember-glow); }
+
+  /* ── WA FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 88px; right: 20px; z-index: 1500;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45); transition: transform 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.08); }
+  .wa-float svg { width: 28px; height: 28px; }
+
   @media (max-width: 960px) {
     nav, .page-hero, .score-strip, .page-wrap, .flash-wrap { padding-left: 24px; padding-right: 24px; }
-    .reviews-grid { grid-template-columns: 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; gap: 16px; }
     .mf-row { grid-template-columns: 1fr; }
     .score-sep { display: none; }
     .hero-inner { flex-direction: column; align-items: flex-start; }
   }
-  @media (max-width: 600px) {
-    .reviews-grid { grid-template-columns: 1fr; }
+
+  @media (max-width: 640px) {
+    body { padding-bottom: 72px; }
+    .bottom-nav { display: block; }
     nav ul { display: none; }
+    nav, .page-hero, .score-strip, .page-wrap, .flash-wrap { padding-left: 16px; padding-right: 16px; }
+    nav { height: 56px; }
+
+    .page-hero { padding: 48px 16px 44px; }
+    .hero-inner { gap: 20px; }
+    .btn-write-review { padding: 12px 20px; font-size: 13px; width: 100%; justify-content: center; }
+
+    .score-strip { padding: 20px 16px; gap: 20px; }
+    .score-big { font-size: 48px; }
+    .score-cats { gap: 16px; }
+    .score-cat-bar { width: 60px; }
+
+    .page-wrap { padding: 36px 16px 64px; }
+    .reviews-grid { grid-template-columns: 1fr; gap: 12px; }
+    .rv-card { padding: 18px 16px; border-radius: 14px; }
+
+    .filter-bar { gap: 8px; margin-bottom: 28px; }
+    .filter-btn { padding: 7px 14px; font-size: 12px; }
+
+    .modal-backdrop { padding: 12px; }
+    .modal-box { border-radius: 20px; }
     .modal-header { padding: 20px; }
-    .modal-body, .modal-footer { padding-left: 20px; padding-right: 20px; }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 0 20px 20px; flex-direction: column; }
+    .btn-cancel, .btn-submit { width: 100%; text-align: center; justify-content: center; }
+
+    footer { padding: 32px 16px 20px; }
+
+    .wa-float { bottom: 82px; }
+  }
+
+  @media (max-width: 400px) {
+    .rv-card { padding: 14px 12px; }
+    .rv-avatar, .rv-avatar-init { width: 38px; height: 38px; font-size: 16px; }
+    .score-big { font-size: 40px; }
+    .page-hero { padding: 40px 12px 36px; }
+    nav, .page-hero, .score-strip, .page-wrap, .flash-wrap { padding-left: 12px; padding-right: 12px; }
   }
 </style>
 </head>
@@ -314,18 +388,20 @@
 
 {{-- NAV --}}
 <nav>
-  <a href="{{ url('/') }}">
+  <a href="{{ url('/') }}" class="brand">
     @php $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])->first(fn($f) => file_exists(public_path("images/{$f}"))); @endphp
     @if($logoFile)
       <img src="{{ asset('images/'.$logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @else
-      <span class="brand-text">Winsome</span>
     @endif
+    <div class="brand-text">
+      <span class="brand-name">Winsome Hotel</span>
+      <span class="brand-tagline">Charm, Luxury, Comfort</span>
+    </div>
   </a>
   <ul>
-    <li><a href="{{ url('/') }}#rooms">Rooms</a></li>
-    <li><a href="{{ url('/') }}#about">About</a></li>
-    <li><a href="{{ url('/') }}#experiences">Experiences</a></li>
+    <li><a href="{{ route('rooms.index') }}">Rooms</a></li>
+    <li><a href="{{ route('location') }}">Location</a></li>
+    <li><a href="{{ url('/') }}#reviews">Reviews</a></li>
     <li><a href="{{ url('/') }}" class="nav-cta">Book a stay</a></li>
   </ul>
 </nav>
@@ -468,6 +544,40 @@
   <p>Arusha, Tanzania &nbsp;·&nbsp; <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a></p>
   <p style="margin-top:12px;border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;">&copy; {{ date('Y') }} Winsome Hotel &middot; <a href="{{ url('/') }}">Back to homepage</a></p>
 </footer>
+
+<!-- WA Float -->
+<a href="https://wa.me/255793411998" class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.837L.057 23.882l6.204-1.63A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.811 9.811 0 01-5.003-1.37l-.36-.214-3.681.968.982-3.596-.235-.372A9.783 9.783 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+  </svg>
+</a>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav" aria-label="Mobile navigation">
+  <div class="bottom-nav-inner">
+    <a href="{{ url('/') }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      Home
+    </a>
+    <a href="{{ route('rooms.index') }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      Rooms
+    </a>
+    <a href="#" class="bn-book active" onclick="openModal();return false;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Review
+    </a>
+    <a href="{{ route('location') }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Location
+    </a>
+    <a href="https://wa.me/255793411998" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.837L.057 23.882l6.204-1.63A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.811 9.811 0 01-5.003-1.37l-.36-.214-3.681.968.982-3.596-.235-.372A9.783 9.783 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      Contact
+    </a>
+  </div>
+</nav>
 
 {{-- ── WRITE A REVIEW MODAL ── --}}
 <div class="modal-backdrop" id="reviewModal">
