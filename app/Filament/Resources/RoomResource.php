@@ -51,6 +51,11 @@ class RoomResource extends Resource
                     ->required()
                     ->prefix('$'),
 
+                Forms\Components\TextInput::make('price_per_night_tzs')
+                    ->label('Price per night (TZS)')
+                    ->numeric()
+                    ->prefix('TZS'),
+
                 Forms\Components\Toggle::make('is_available')
                     ->label('Available for booking')
                     ->default(true),
@@ -107,6 +112,12 @@ class RoomResource extends Resource
 
                 Tables\Columns\TextColumn::make('price_per_night')
                     ->money('USD')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('price_per_night_tzs')
+                    ->label('Price (TZS)')
+                    ->numeric(decimalPlaces: 0, thousandsSeparator: ',')
+                    ->prefix('TZS ')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('size_sqm')
