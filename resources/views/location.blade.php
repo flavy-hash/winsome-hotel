@@ -3,7 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Location — Winsome Hotel</title>
+  <x-seo
+      title="Location & Directions — Winsome Hotel Arusha | Mkonoo, Terat Tanzania"
+      description="Winsome Hotel is located in Mkonoo, Terat, Arusha — 13 km from Arusha Airport, 11 km from city centre. Easy access to Arusha National Park and nearby attractions."
+      :image="asset('images/winsome3.jpeg')"
+      :schema="json_encode([
+          '@context' => 'https://schema.org',
+          '@type'    => 'LodgingBusiness',
+          'name'     => 'Winsome Hotel',
+          'url'      => url('/'),
+          'telephone' => '+255793411998',
+          'address'  => [
+              '@type'           => 'PostalAddress',
+              'streetAddress'   => 'Mkonoo, Terat',
+              'addressLocality' => 'Arusha',
+              'addressCountry'  => 'TZ',
+          ],
+          'geo' => [
+              '@type'     => 'GeoCoordinates',
+              'latitude'  => -3.3731,
+              'longitude' => 36.6823,
+          ],
+          'hasMap' => 'https://maps.google.com/?q=Winsome+Hotel+Arusha',
+      ])"
+  />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -177,6 +200,7 @@
       border-right: none; border-left-color: var(--ink);
     }
     .wa-float:hover .wa-tooltip { opacity: 1; }
+    @media (max-width: 767px) { .wa-float { display: none !important; } }
 
     /* RESPONSIVE */
 
@@ -253,13 +277,7 @@
 
 <nav>
   <a href="{{ url('/') }}" class="brand">
-    @php
-      $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
-        ->first(fn($f) => file_exists(public_path("images/{$f}")));
-    @endphp
-    @if($logoFile)
-      <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @endif
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo">
     <div class="brand-text">
       <span class="brand-name">Winsome Hotel</span>
       <span class="brand-tagline">Charm, Luxury, Comfort</span>
