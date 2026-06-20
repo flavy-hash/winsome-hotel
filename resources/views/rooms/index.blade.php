@@ -2,8 +2,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Rooms — Winsome Hotel, Arusha</title>
-<meta name="description" content="Browse all available rooms and suites at Winsome Hotel, Arusha. Book directly for the best rate.">
+<x-seo
+    title="Rooms & Rates — Winsome Hotel Arusha | Standard & Deluxe Rooms Tanzania"
+    description="Browse all available rooms at Winsome Hotel, Arusha. Standard and Deluxe rooms with Wi-Fi, AC, city views and Mount Meru views. Book directly for the best rate."
+    :image="asset('images/winsome3.jpeg')"
+/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,10 +291,7 @@
 {{-- NAV --}}
 <nav>
   <a href="{{ url('/') }}" class="brand">
-    @php $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])->first(fn($f) => file_exists(public_path("images/{$f}"))); @endphp
-    @if($logoFile)
-      <img src="{{ asset('images/'.$logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @endif
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo">
     <div class="brand-text">
       <span class="brand-name">Winsome Hotel</span>
       <span class="brand-tagline">Charm, Luxury, Comfort</span>
