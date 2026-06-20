@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class RoomResource extends Resource
 {
@@ -67,27 +68,61 @@ class RoomResource extends Resource
                     ->placeholder('Add feature')
                     ->columnSpanFull(),
 
+                Forms\Components\Placeholder::make('current_cover_preview')
+                    ->label('Current cover image')
+                    ->content(fn ($record) => $record?->image_path
+                        ? new HtmlString('<img src="' . asset('storage/' . $record->image_path) . '" style="max-height:160px;border-radius:10px;border:1px solid #e5e7eb;">')
+                        : new HtmlString('<span style="color:#9ca3af;font-size:13px;">No image set yet.</span>'))
+                    ->columnSpanFull()
+                    ->visibleOn('edit'),
+
                 Forms\Components\FileUpload::make('image_path')
-                    ->label('Cover image')
-                    ->helperText('Main image shown on room cards and the hero of the detail page.')
+                    ->label(fn ($record) => $record?->image_path ? 'Replace cover image' : 'Upload cover image')
+                    ->helperText('Upload a new image to replace the current one. Leave empty to keep the existing image.')
                     ->image()
+                    ->disk('public')
                     ->directory('rooms')
                     ->imageResizeMode('cover')
                     ->imageCropAspectRatio('4:3')
                     ->imageResizeTargetWidth('800')
                     ->imageResizeTargetHeight('600')
+                    ->afterStateHydrated(function ($component) {
+                        if ($component->getRecord()) {
+                            $component->state(null);
+                        }
+                    })
                     ->columnSpanFull(),
 
+                Forms\Components\Placeholder::make('current_gallery_preview')
+                    ->label('Current gallery images')
+                    ->content(function ($record) {
+                        if (empty($record?->gallery)) {
+                            return new HtmlString('<span style="color:#9ca3af;font-size:13px;">No gallery images set yet.</span>');
+                        }
+                        $imgs = collect($record->gallery)->map(fn ($path) =>
+                            '<img src="' . asset('storage/' . $path) . '" style="height:80px;width:100px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">'
+                        )->implode('');
+                        return new HtmlString('<div style="display:flex;flex-wrap:wrap;gap:8px;">' . $imgs . '</div>');
+                    })
+                    ->columnSpanFull()
+                    ->visibleOn('edit'),
+
                 Forms\Components\FileUpload::make('gallery')
-                    ->label('Gallery images')
-                    ->helperText('Upload multiple photos shown in the gallery on the room detail page.')
+                    ->label(fn ($record) => !empty($record?->gallery) ? 'Add / replace gallery images' : 'Upload gallery images')
+                    ->helperText('Upload new images to add to the gallery. Leave empty to keep existing images.')
                     ->image()
+                    ->disk('public')
                     ->multiple()
                     ->reorderable()
                     ->directory('rooms/gallery')
                     ->imageResizeMode('cover')
                     ->imageResizeTargetWidth('1200')
                     ->imageResizeTargetHeight('800')
+                    ->afterStateHydrated(function ($component) {
+                        if ($component->getRecord()) {
+                            $component->state(null);
+                        }
+                    })
                     ->columnSpanFull(),
             ]),
         ]);
