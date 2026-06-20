@@ -2,8 +2,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Winsome Hotel — A boutique stay on the Tanzanian coast</title>
-<meta name="description" content="Winsome Hotel — a boutique stay in Arusha, Tanzania. Twenty-four suites, slow mornings, and a pool that catches the sunset." />
+<x-seo
+    title="Winsome Hotel Arusha — Comfortable Stays with Mount Meru Views | Tanzania"
+    description="Stay at Winsome Hotel in Arusha, Tanzania. Enjoy comfortable rooms, stunning views of Mount Meru and Kilimanjaro, and easy access to Arusha National Park. Book directly for the best rate."
+    :image="asset('images/winsome3.jpeg')"
+    :schema="json_encode([
+        '@context'    => 'https://schema.org',
+        '@type'       => 'LodgingBusiness',
+        'name'        => 'Winsome Hotel',
+        'description' => 'A boutique hotel in Arusha, Tanzania with comfortable rooms and spectacular views of Mount Meru and Mount Kilimanjaro.',
+        'url'         => url('/'),
+        'telephone'   => '+255793411998',
+        'email'       => config('mail.from.address'),
+        'address'     => [
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => 'Mkonoo, Terat',
+            'addressLocality' => 'Arusha',
+            'addressCountry'  => 'TZ',
+        ],
+        'geo' => [
+            '@type'     => 'GeoCoordinates',
+            'latitude'  => -3.3731,
+            'longitude' => 36.6823,
+        ],
+        'image'       => asset('images/winsome3.jpeg'),
+        'priceRange'  => '$$',
+        'starRating'  => ['@type' => 'Rating', 'ratingValue' => '4'],
+        'amenityFeature' => [
+            ['@type' => 'LocationFeatureSpecification', 'name' => 'Free Wi-Fi', 'value' => true],
+            ['@type' => 'LocationFeatureSpecification', 'name' => 'Air Conditioning', 'value' => true],
+            ['@type' => 'LocationFeatureSpecification', 'name' => 'City View', 'value' => true],
+        ],
+    ])"
+/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,8 +156,8 @@
   nav ul a:hover::after { transform: scaleX(1); }
   .nav-cta {
     background: var(--ember);
-    color: var(--ink);
-    font-size: 13px; font-weight: 500;
+    color: #fff;
+    font-size: 16px; font-weight: 700;
     padding: 10px 22px;
     border-radius: 100px;
     transition: transform 0.2s;
@@ -215,10 +246,10 @@
   }
   .btn-primary {
     background: var(--ember);
-    color: var(--ink);
+    color: #fff;
     padding: 16px 30px;
     border-radius: 100px;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 14px;
     letter-spacing: 0.02em;
     display: inline-flex; align-items: center; gap: 8px;
@@ -727,16 +758,30 @@
   .fac-attr-list li {
     display: flex; align-items: center; gap: 8px;
     background: #fff;
-    border: 1px solid rgba(11,18,32,0.12);
+    border: 1px solid rgba(242,107,31,0.25);
     border-radius: 8px;
     padding: 10px 16px;
-    font-size: 13px; color: rgba(11,18,32,0.75);
+    font-size: 13px; color: var(--ember);
+    font-weight: 500;
   }
   .fac-attr-list li::before {
     content: '→';
     color: var(--ember);
     font-weight: 600;
   }
+  .fac-attr-list li a {
+    color: var(--ember); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .fac-attr-list li:has(a) {
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .fac-attr-list li:has(a):hover {
+    border-color: var(--ember);
+    background: #fff8f4;
+  }
+  .fac-attr-list li:has(a):hover a { color: var(--ember-deep); }
 
   /* ============ EXPERIENCES (PULL QUOTE) ============ */
   .quote {
@@ -770,6 +815,7 @@
   .experiences {
     background: var(--cream-deep);
   }
+  a.exp-card { display: block; text-decoration: none; color: inherit; }
   .exp-grid {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
@@ -809,9 +855,10 @@
     position: absolute; inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(11,18,32,0.15) 0%,
-      rgba(11,18,32,0.0)  25%,
-      rgba(11,18,32,0.65) 100%
+      rgba(11,18,32,0.10) 0%,
+      rgba(11,18,32,0.0)  30%,
+      rgba(11,18,32,0.55) 60%,
+      rgba(11,18,32,0.90) 100%
     );
     z-index: 1;
   }
@@ -819,20 +866,29 @@
     font-family: var(--display);
     font-size: 26px;
     font-weight: 400;
-    line-height: 1.1;
-    margin-bottom: 6px;
+    line-height: 1.2;
+    margin-bottom: 0;
     position: relative;
     z-index: 2;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
   }
   .exp-card.tall h4 { font-size: 36px; }
   .exp-card .tag {
     font-size: 11px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    opacity: 0.8;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     position: relative;
     z-index: 2;
+    display: inline-block;
+    background: rgba(242,107,31,0.22);
+    border: 1px solid rgba(242,107,31,0.55);
+    padding: 3px 10px;
+    border-radius: 100px;
+    color: var(--ember);
+    font-weight: 600;
+    text-shadow: none;
   }
   .exp-card .arrow {
     position: absolute;
@@ -933,6 +989,53 @@
     text-decoration: none;
   }
   .btn-reviews:hover { background: var(--ink); color: var(--cream); }
+  .rv-read-more {
+    background: none; border: none; padding: 0; margin: 0;
+    font-family: var(--body); font-size: 13px; font-weight: 600;
+    color: var(--ember); cursor: pointer; letter-spacing: 0.02em;
+    text-decoration: underline; text-underline-offset: 3px;
+    transition: color 0.2s; align-self: flex-start;
+  }
+  .rv-read-more:hover { color: var(--ember-deep); }
+  /* Review modal */
+  .rm-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(11,18,32,0.65); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .rm-backdrop.open { display: flex; }
+  .rm-box {
+    background: #fff; border-radius: 20px; padding: 40px 36px;
+    max-width: 560px; width: 100%; position: relative;
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+  }
+  .rm-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none; font-size: 20px;
+    cursor: pointer; color: rgba(11,18,32,0.35); transition: color 0.2s; line-height: 1;
+  }
+  .rm-close:hover { color: var(--ink); }
+  .rm-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .rm-avatar {
+    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    background: #EAEAEA; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 19px; font-weight: 500;
+  }
+  .rm-name { font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.2; }
+  .rm-meta { font-size: 12px; color: rgba(11,18,32,0.45); margin-top: 3px; }
+  .rm-stars { display: flex; gap: 3px; margin-bottom: 14px; }
+  .rm-stars svg { width: 16px; height: 16px; }
+  .rm-title {
+    font-family: var(--display); font-size: 19px; font-weight: 400;
+    color: var(--ink); line-height: 1.3; margin-bottom: 14px;
+  }
+  .rm-body {
+    font-size: 15px; color: #7a3d00; line-height: 1.8;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  @media (max-width: 560px) { .rm-box { padding: 28px 20px; border-radius: 16px; } }
 
   /* ============ CTA ============ */
   .cta {
@@ -1073,6 +1176,7 @@
     border-left-color: var(--ink);
   }
   .wa-float:hover .wa-tooltip { opacity: 1; }
+  @media (max-width: 767px) { .wa-float { display: none !important; } }
   .footer-bottom {
     max-width: 1280px;
     margin: 0 auto;
@@ -1252,13 +1356,7 @@
 <!-- ====== NAVIGATION ====== -->
 <nav id="nav">
   <a href="{{ url('/') }}" class="brand">
-    @php
-      $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
-        ->first(fn($f) => file_exists(public_path("images/{$f}")));
-    @endphp
-    @if($logoFile)
-      <img src="{{ asset('images/'.$logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @endif
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo">
     <div class="brand-text">
       <span class="brand-name">Winsome Hotel</span>
       <span class="brand-tagline">Charm, Luxury, Comfort</span>
@@ -1294,7 +1392,9 @@
     </div>
 
     <div class="hero-frame">
-      @if(file_exists(public_path('images/hero-main.jpg')))
+      @if(file_exists(public_path('images/winsome3.jpeg')))
+        <img src="{{ asset('images/winsome3.jpeg') }}" alt="Winsome Hotel">
+      @elseif(file_exists(public_path('images/hero-main.jpg')))
         <img src="{{ asset('images/hero-main.jpg') }}" alt="Winsome Hotel">
       @elseif(file_exists(public_path('images/hero-main.png')))
         <img src="{{ asset('images/hero-main.png') }}" alt="Winsome Hotel">
@@ -1305,13 +1405,13 @@
     </div>
 
     <div class="hero-frame-small">
-      @if(file_exists(public_path('images/hero-small.jpg')))
-        <img src="{{ asset('images/hero-small.jpg') }}" alt="Winsome Hotel detail">
+      @if(file_exists(public_path('images/winsome1.jpeg')))
+        <img src="{{ asset('images/winsome1.jpeg') }}" alt="Winsome Hotel detail">
       @elseif(file_exists(public_path('images/hero-small.png')))
         <img src="{{ asset('images/hero-small.png') }}" alt="Winsome Hotel detail">
       @else
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=85"
-             alt="Winsome Hotel beach">
+        <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=400&q=85"
+             alt="Mount Meru, Arusha">
       @endif
     </div>
   </div>
@@ -1479,8 +1579,8 @@
 <section class="about" id="about">
   <div class="about-visual">
     <div class="about-img-1">
-      @if(file_exists(public_path('images/about-1.jpg')))
-        <img src="{{ asset('images/about-1.jpg') }}" alt="Winsome Hotel">
+      @if(file_exists(public_path('images/R.jpg')))
+        <img src="{{ asset('images/R.jpg') }}" alt="Winsome Hotel">
       @elseif(file_exists(public_path('images/about-1.png')))
         <img src="{{ asset('images/about-1.png') }}" alt="Winsome Hotel">
       @else
@@ -1505,7 +1605,7 @@
     <div class="section-eyebrow">Our Story</div>
     <h2 class="section-title">A hotel with <em>views of two peaks</em>.</h2>
     <p class="body-lead">Winsome Hotel was born out of an idea conceived in 2010 by Nemes Victor Massawe, the sole proprietor of the facility.</p>
-    <p class="body">The vision is to create a unique hotel providing comfortable accommodation to tourists and business travellers at affordable prices. Enjoy spectacular views of both Mount Meru and Mount Kilimanjaro — situated 3 km off the Arusha Bypass Road, 13 km from Arusha Airport, and 11 km from Arusha city centre.</p>
+    <p class="body">Resulting from the vision is a unique hotel providing comfortable accommodation to tourists and business travelers at affordable prices. Enjoy spectacular views of both Mount Meru and Mount Kilimanjaro, a refreshing serene environment surrounded by floral gardens, and away from the hustle and bustle of Arusha City Centre. Winsome Hotel situated 3 km off the Arusha Bypass Road, 13 km from Arusha Airport, and 11 km from Arusha city Centre.</p>
 
     <!-- Unique Selling Points -->
     <div class="about-usp">
@@ -1694,11 +1794,11 @@
         Nearby Attractions
       </h3>
       <ul class="fac-attr-list">
-        <li>Miserani Snake Park</li>
-        <li>Napulu Waterfall</li>
-        <li>Cultural Heritage Art Gallery</li>
+        <li><a href="https://meseranisnakepark.net/" target="_blank" rel="noopener">Miserani Snake Park</a></li>
+        <li><a href="https://www.journeyera.com/mount-meru-waterfall-hike-in-tanzania/" target="_blank" rel="noopener">Napuru Waterfall</a></li>
+        <li><a href="https://culturalheritagetz.com/" target="_blank" rel="noopener">Cultural Heritage Art Gallery</a></li>
         <li>Arusha City Walk</li>
-        <li>Arusha National Park</li>
+        <li><a href="https://www.arushapark.com/" target="_blank" rel="noopener">Arusha National Park</a></li>
       </ul>
     </div>
   </div>
@@ -1716,79 +1816,74 @@
 <!-- ====== EXPERIENCES ====== -->
 <section class="experiences" id="experiences">
   <div class="container">
-    <div class="section-eyebrow">Beyond the door</div>
-    <h2 class="section-title">Days that earn their <em>own postcards</em>.</h2>
+    <div class="section-eyebrow">Explore Arusha</div>
+    <h2 class="section-title">Adventures waiting <em>beyond our door</em>.</h2>
 
     <div class="exp-grid">
 
-      <div class="exp-card tall">
+      {{-- Miserani Snake Park — tall card --}}
+      <a class="exp-card tall" href="https://meseranisnakepark.net/" target="_blank" rel="noopener">
         @if(file_exists(public_path('images/exp-1.jpg')))
-          <img src="{{ asset('images/exp-1.jpg') }}" alt="Sunrise dhow sailing">
-        @elseif(file_exists(public_path('images/exp-1.png')))
-          <img src="{{ asset('images/exp-1.png') }}" alt="Sunrise dhow sailing">
+          <img src="{{ asset('images/exp-1.jpg') }}" alt="Miserani Snake Park">
         @else
-          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=85"
-               alt="Sunrise dhow sailing">
+          <img src="https://images.unsplash.com/photo-1531386151447-fd76ad50012f?auto=format&fit=crop&w=800&q=85"
+               alt="Miserani Snake Park">
         @endif
         <div class="arrow">→</div>
-        <div class="tag">Half day</div>
-        <h4>Sunrise dhow sailing<br>to Mbegani reef</h4>
-      </div>
+        <div class="tag">Wildlife</div>
+        <h4>Miserani Snake Park</h4>
+      </a>
 
-      <div class="exp-card">
+      {{-- Napuru Waterfall --}}
+      <a class="exp-card" href="https://www.journeyera.com/mount-meru-waterfall-hike-in-tanzania/" target="_blank" rel="noopener">
         @if(file_exists(public_path('images/exp-2.jpg')))
-          <img src="{{ asset('images/exp-2.jpg') }}" alt="Spice farm and old town">
-        @elseif(file_exists(public_path('images/exp-2.png')))
-          <img src="{{ asset('images/exp-2.png') }}" alt="Spice farm and old town">
+          <img src="{{ asset('images/exp-2.jpg') }}" alt="Napuru Waterfall">
         @else
-          <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=85"
-               alt="Spice farm and old town">
+          <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=600&q=85"
+               alt="Napuru Waterfall">
         @endif
         <div class="arrow">→</div>
-        <div class="tag">Full day</div>
-        <h4>Spice farm &amp; old town</h4>
-      </div>
+        <div class="tag">Hiking</div>
+        <h4>Napuru Waterfall</h4>
+      </a>
 
-      <div class="exp-card">
+      {{-- Cultural Heritage Art Gallery --}}
+      <a class="exp-card" href="https://culturalheritagetz.com/" target="_blank" rel="noopener">
         @if(file_exists(public_path('images/exp-3.jpg')))
-          <img src="{{ asset('images/exp-3.jpg') }}" alt="Sunset cocktails on the rooftop">
-        @elseif(file_exists(public_path('images/exp-3.png')))
-          <img src="{{ asset('images/exp-3.png') }}" alt="Sunset cocktails on the rooftop">
+          <img src="{{ asset('images/exp-3.jpg') }}" alt="Cultural Heritage Art Gallery">
         @else
-          <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=85"
-               alt="Sunset cocktails">
+          <img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=600&q=85"
+               alt="Cultural Heritage Art Gallery">
         @endif
         <div class="arrow">→</div>
-        <div class="tag">Evening</div>
-        <h4>Sunset cocktails on the rooftop</h4>
-      </div>
+        <div class="tag">Culture</div>
+        <h4>Cultural Heritage Art Gallery</h4>
+      </a>
 
-      <div class="exp-card">
+      {{-- Arusha National Park --}}
+      <a class="exp-card" href="https://www.arushapark.com/" target="_blank" rel="noopener">
         @if(file_exists(public_path('images/exp-4.jpg')))
-          <img src="{{ asset('images/exp-4.jpg') }}" alt="Yoga on the beach deck">
-        @elseif(file_exists(public_path('images/exp-4.png')))
-          <img src="{{ asset('images/exp-4.png') }}" alt="Yoga on the beach deck">
+          <img src="{{ asset('images/exp-4.jpg') }}" alt="Arusha National Park">
         @else
-          <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=85"
-               alt="Yoga on the beach deck">
+          <img src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=600&q=85"
+               alt="Arusha National Park">
         @endif
         <div class="arrow">→</div>
-        <div class="tag">Morning</div>
-        <h4>Yoga on the beach deck</h4>
-      </div>
+        <div class="tag">Nature</div>
+        <h4>Arusha National Park</h4>
+      </a>
 
+      {{-- Arusha City Walk --}}
       <div class="exp-card">
         @if(file_exists(public_path('images/exp-5.jpg')))
-          <img src="{{ asset('images/exp-5.jpg') }}" alt="Coastal tasting menu">
-        @elseif(file_exists(public_path('images/exp-5.png')))
-          <img src="{{ asset('images/exp-5.png') }}" alt="Coastal tasting menu">
+          <img src="{{ asset('images/exp-5.jpg') }}" alt="Arusha City Walk">
         @else
-          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=600&q=85"
-               alt="Coastal tasting menu">
+          <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=85"
+               alt="Arusha City Walk">
         @endif
         <div class="arrow">→</div>
-        <div class="tag">Chef's table</div>
-        <h4>Coastal tasting menu</h4>
+        <div class="tag">City</div>
+        <h4>Arusha City Walk</h4>
       </div>
 
     </div>
@@ -1850,6 +1945,18 @@
           <div class="rv-title">{{ $review->title }}</div>
         @endif
         <p class="rv-body">{{ Str::limit($review->body, 160) }}</p>
+        @if(strlen($review->body) > 160)
+          <button class="rv-read-more"
+            onclick="openReviewModal(this)"
+            data-name="{{ e($review->guest_name) }}"
+            data-room="{{ $review->room ? e($review->room->name) : '' }}"
+            data-date="{{ $review->created_at->format('M d, Y') }}"
+            data-rating="{{ $review->rating }}"
+            data-title="{{ e($review->title ?? '') }}"
+            data-body="{{ e($review->body) }}">
+            Read more
+          </button>
+        @endif
       </div>
       @endforeach
     </div>
@@ -1862,6 +1969,23 @@
 
   </div>
 </section>
+
+<!-- Review full-text modal -->
+<div class="rm-backdrop" id="reviewModal" onclick="if(event.target===this)closeReviewModal()">
+  <div class="rm-box" role="dialog" aria-modal="true">
+    <button class="rm-close" onclick="closeReviewModal()" aria-label="Close">✕</button>
+    <div class="rm-head">
+      <div class="rm-avatar" id="rm-avatar"></div>
+      <div>
+        <div class="rm-name" id="rm-name"></div>
+        <div class="rm-meta" id="rm-meta"></div>
+      </div>
+    </div>
+    <div class="rm-stars" id="rm-stars"></div>
+    <div class="rm-title" id="rm-title"></div>
+    <p class="rm-body" id="rm-body"></p>
+  </div>
+</div>
 @endif
 
 <!-- ====== CTA ====== -->
@@ -1877,15 +2001,9 @@
 <footer id="contact">
   <div class="footer-grid">
     <div>
-      @php
-        $logoFile = $logoFile ?? collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
-          ->first(fn($f) => file_exists(public_path("images/{$f}")));
-      @endphp
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-        @if($logoFile)
-          <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel"
-               style="height:44px;width:auto;display:block;flex-shrink:0;background:#fff;padding:3px 6px;border-radius:6px;">
-        @endif
+        <img src="{{ asset('images/logo.png') }}" alt="Logo"
+             style="height:44px;width:auto;display:block;flex-shrink:0;background:#fff;padding:3px 6px;border-radius:6px;">
         <div>
           <div class="footer-brand">Winsome Hotel</div>
           <p class="footer-tagline" style="margin-top:2px;">Charm, Luxury, Comfort</p>
@@ -1907,6 +2025,10 @@
         <li>
           <svg class="fc-icon fc-icon--wa" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
           <a href="https://wa.me/255793411998" target="_blank" rel="noopener">WhatsApp Us</a>
+        </li>
+        <li>
+          <svg class="fc-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:info@winsomehotel.co.tz">info@winsomehotel.co.tz</a>
         </li>
       </ul>
     </div>
@@ -2038,6 +2160,33 @@
   if (document.body.dataset.errors === '1') {
     document.getElementById('booking-modal').style.display = 'flex';
   }
+
+  // Review full-text modal
+  const starPath = 'd="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.27l-4.77 2.51.91-5.32L2.27 6.62l5.34-.78z"';
+  function openReviewModal(btn) {
+    const d = btn.dataset;
+    document.getElementById('rm-avatar').textContent = d.name.charAt(0).toUpperCase();
+    document.getElementById('rm-name').textContent  = d.name;
+    const meta = [d.room ? 'Room: ' + d.room : '', d.date].filter(Boolean).join(' · ');
+    document.getElementById('rm-meta').textContent  = meta;
+    const rating = parseInt(d.rating) || 0;
+    document.getElementById('rm-stars').innerHTML = Array.from({length:5}, (_,i) =>
+      `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path ${starPath} fill="${i < rating ? '#F26B1F' : 'rgba(11,18,32,0.12)'}"/></svg>`
+    ).join('');
+    const titleEl = document.getElementById('rm-title');
+    titleEl.textContent  = d.title;
+    titleEl.style.display = d.title ? '' : 'none';
+    document.getElementById('rm-body').textContent  = d.body;
+    document.getElementById('reviewModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReviewModal() {
+    document.getElementById('reviewModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeReviewModal();
+  });
 </script>
 
 </body>
