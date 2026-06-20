@@ -20,9 +20,17 @@ Route::post('/reviews', [ReviewController::class, 'storeGeneral'])->name('review
 
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+Route::get('/rooms/{room}/availability', [RoomController::class, 'availability'])->name('rooms.availability');
 Route::post('/rooms/{room}/reviews', [ReviewController::class, 'store'])->name('rooms.reviews.store');
 
 Route::get('/location', fn() => view('location'))->name('location');
 
+Route::get('/sitemap.xml', function () {
+    $rooms = Room::where('is_available', true)->get();
+    $content = view('sitemap', compact('rooms'))->render();
+    return response($content, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/confirmation/{booking}', [BookingController::class, 'confirmation'])->name('booking.confirmation');
+Route::get('/rooms/{room}/booked-dates', [BookingController::class, 'bookedDates'])->name('rooms.booked-dates');
