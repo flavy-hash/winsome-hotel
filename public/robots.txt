@@ -1,2 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /booking/confirmation/
+
+Sitemap: https://winsomehotel.co.tz/sitemap.xml
