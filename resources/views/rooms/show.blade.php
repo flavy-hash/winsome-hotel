@@ -2,12 +2,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ $room->name }} — Winsome Hotel</title>
-<meta name="description" content="{{ $room->description ? Str::limit($room->description, 160) : $room->name . ' at Winsome Hotel, Arusha.' }}">
+<x-seo
+    title="{{ $room->name }} — Winsome Hotel Arusha | {{ $room->tag ?? 'Hotel Room' }} Tanzania"
+    description="{{ $room->description ? Str::limit($room->description, 155) : $room->name . ' at Winsome Hotel, Arusha, Tanzania. ' . ($room->size_sqm ? $room->size_sqm . '. ' : '') . ($room->bed_type ? $room->bed_type . '. ' : '') . 'Book directly for the best rate.' }}"
+    :image="$room->image_path ? asset('storage/' . $room->image_path) : asset('images/winsome3.jpeg')"
+    type="product"
+    :schema="json_encode([
+        '@context' => 'https://schema.org',
+        '@type'    => 'HotelRoom',
+        'name'     => $room->name . ' — Winsome Hotel',
+        'description' => $room->description,
+        'image'    => $room->image_path ? asset('storage/' . $room->image_path) : asset('images/winsome3.jpeg'),
+        'url'      => route('rooms.show', $room),
+        'bed'      => $room->bed_type,
+        'occupancy' => ['@type' => 'QuantitativeValue', 'maxValue' => $room->max_guests],
+        'offers'   => [
+            '@type'         => 'Offer',
+            'price'         => $room->price_per_night,
+            'priceCurrency' => 'USD',
+            'availability'  => $room->is_available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            'url'           => route('rooms.show', $room),
+        ],
+        'containedInPlace' => [
+            '@type' => 'LodgingBusiness',
+            'name'  => 'Winsome Hotel',
+            'url'   => url('/'),
+        ],
+    ])"
+/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,7 +51,7 @@
     --cream:      #F6F1E7;
     --cream-deep: #EBE3D2;
     --line:       rgba(255,255,255,0.07);
-    --display:    'Fraunces', Georgia, serif;
+    --display:    'Poppins', system-ui, sans-serif;
     --body:       'Inter Tight', system-ui, sans-serif;
   }
 
@@ -60,13 +86,11 @@
     border-bottom: 1px solid var(--line);
     transition: padding 0.3s;
   }
-  .brand { display: flex; align-items: center; }
-  .brand-logo {
-    height: 34px;
-    width: auto;
-    display: block;
-    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
-  }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .brand-logo { height: 40px; width: auto; display: block; flex-shrink: 0; background: #fff; padding: 3px 6px; border-radius: 6px; }
+  .brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .brand-name { font-family: var(--display); font-weight: 400; font-size: 17px; letter-spacing: -0.01em; color: var(--cream); line-height: 1.1; }
+  .brand-tagline { font-family: var(--body); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ember-glow); font-weight: 500; line-height: 1; }
   nav ul {
     display: flex; gap: 36px; list-style: none;
     font-size: 13px; letter-spacing: 0.04em; color: rgba(246,241,231,0.65);
@@ -254,6 +278,7 @@
     font-family: var(--body); font-size: 14px;
     color: rgba(246,241,231,0.4); margin-left: 4px;
   }
+  .price-tzs { display: block; font-family: var(--body); font-size: 13px; color: rgba(246,241,231,0.45); margin-top: 4px; }
   .price-note { font-size: 12px; color: rgba(246,241,231,0.4); margin-bottom: 28px; }
 
   .booking-divider { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
@@ -307,11 +332,88 @@
   .btn-reserve:hover { background: var(--ember-deep); color: #fff; }
   .booking-note { text-align: center; font-size: 12px; color: rgba(246,241,231,0.35); margin-top: 12px; }
 
+  /* cancellation policy – specs panel */
+  .specs-row--full { align-items: flex-start; }
+  .cancel-policy { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .cp-row { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .cp-days { font-size: 12px; color: rgba(246,241,231,0.55); }
+  .cp-badge { font-size: 11px; font-weight: 600; border-radius: 100px; padding: 2px 10px; letter-spacing: 0.04em; }
+  .cp-full  { background: rgba(34,197,94,0.15);  color: #86efac; }
+  .cp-half  { background: rgba(234,179,8,0.15);  color: #fde047; }
+  .cp-none  { background: rgba(239,68,68,0.15);  color: #fca5a5; }
+
+  /* cancellation policy – booking card */
+  .bc-policy {
+    margin-top: 20px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .bc-policy-title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(246,241,231,0.5);
+    margin-bottom: 12px;
+  }
+  .bc-policy-title svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .bc-policy-rows { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+  .bc-policy-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(246,241,231,0.6);
+  }
+  .bc-badge { font-size: 11px; font-weight: 600; border-radius: 100px; padding: 2px 9px; }
+  .bc-full  { background: rgba(34,197,94,0.15);  color: #86efac; }
+  .bc-half  { background: rgba(234,179,8,0.15);  color: #fde047; }
+  .bc-none  { background: rgba(239,68,68,0.15);  color: #fca5a5; }
+  .bc-times {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: rgba(246,241,231,0.4);
+    padding-top: 10px; border-top: 1px solid var(--line);
+  }
+  .bc-times strong { color: rgba(246,241,231,0.75); }
+
   .error-box {
     background: rgba(185,28,28,0.15); border: 1px solid rgba(252,165,165,0.3);
     border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
     font-size: 13px; color: #FCA5A5;
   }
+
+  /* ── AVAILABILITY CALENDAR ── */
+  .avail-wrap { margin: 16px 0; }
+  .avail-notice {
+    display: none; border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; font-weight: 500; margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .avail-notice.conflict {
+    background: rgba(185,28,28,0.18); border: 1px solid rgba(252,165,165,0.35);
+    color: #FCA5A5; display: block;
+  }
+  .avail-notice.ok {
+    background: rgba(21,128,61,0.18); border: 1px solid rgba(74,222,128,0.35);
+    color: #86EFAC; display: block;
+  }
+  .cal-widget { background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .cal-nav button { background: none; border: none; color: rgba(246,241,231,0.55); cursor: pointer; font-size: 16px; padding: 2px 8px; border-radius: 4px; transition: color 0.2s; }
+  .cal-nav button:hover { color: var(--cream); }
+  .cal-month-label { font-family: var(--display); font-size: 13px; font-weight: 500; color: var(--cream); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal-dow { text-align: center; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(246,241,231,0.3); padding: 6px 0; }
+  .cal-day {
+    text-align: center; font-size: 12px; padding: 5px 2px; cursor: default;
+    color: rgba(246,241,231,0.65); position: relative;
+  }
+  .cal-day.empty { background: none; }
+  .cal-day.past { color: rgba(246,241,231,0.2); }
+  .cal-day.booked { background: rgba(185,28,28,0.25); color: #FCA5A5; border-radius: 4px; font-weight: 600; }
+  .cal-day.booked::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #FCA5A5; border-radius: 50%; }
+  .cal-day.selected { background: var(--ember); color: #fff; border-radius: 4px; font-weight: 600; }
+  .cal-day.in-range { background: rgba(242,107,31,0.2); color: var(--cream); }
+  .cal-legend { display: flex; gap: 12px; padding: 8px 14px; border-top: 1px solid var(--line); }
+  .cal-legend span { font-size: 11px; color: rgba(246,241,231,0.45); display: flex; align-items: center; gap: 5px; }
+  .cal-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+  .cal-legend i.leg-booked { background: rgba(185,28,28,0.5); }
+  .cal-legend i.leg-sel { background: var(--ember); }
 
   /* ── REVIEWS ── */
   .reviews-section { padding: 72px 0 80px; border-top: 1px solid var(--line); }
@@ -434,6 +536,7 @@
   }
   .other-price { font-family: var(--display); font-size: 22px; color: var(--ember-glow); }
   .other-price small { font-family: var(--body); font-size: 11px; color: rgba(246,241,231,0.4); margin-left: 3px; }
+  .other-price .price-tzs { font-size: 11px; margin-top: 2px; }
   .other-link {
     font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--cream); border-bottom: 1px solid var(--ember);
@@ -488,21 +591,89 @@
   .lightbox-counter { font-size: 13px; color: rgba(246,241,231,0.45); }
 
   /* ── RESPONSIVE ── */
+
+  /* Tablet */
   @media (max-width: 960px) {
     .page-wrap { padding: 0 24px; }
     nav { padding: 16px 24px; }
     .hero-content { padding: 0 24px 40px; }
-    .content-grid { grid-template-columns: 1fr; gap: 48px; }
+    .content-grid { grid-template-columns: 1fr; gap: 40px; }
     .booking-card { position: static; }
-    .other-grid { grid-template-columns: 1fr 1fr; }
+    .other-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
     .gallery-grid { grid-template-columns: 1fr 1fr; }
     .gallery-grid .g-main { grid-column: span 2; }
   }
-  @media (max-width: 600px) {
+
+  /* Mobile */
+  @media (max-width: 640px) {
     nav ul { display: none; }
-    .other-grid { grid-template-columns: 1fr; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .hero-title { font-size: 36px; }
+    nav { padding: 14px 16px; }
+    .page-wrap { padding: 0 16px; }
+    .hero-content { padding: 0 16px 32px; }
+    .hero { height: 65vh; min-height: 360px; }
+    .hero-title { font-size: clamp(28px, 8vw, 36px); }
+    .hero-tag { font-size: 10px; }
+    .content-grid { gap: 28px; }
+    .specs-panel { padding: 20px; }
+    .specs-row { padding: 12px 0; }
+    .specs-label { font-size: 12px; }
+    .specs-value { font-size: 13px; }
+    .cancel-policy .cp-row { gap: 6px; }
+    .booking-card { padding: 24px 20px; border-radius: 14px; }
+    .price-display { font-size: 36px; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .gallery-grid .g-main { grid-column: span 2; }
+    .other-grid { grid-template-columns: 1fr; gap: 14px; }
+    .other-section { padding-top: 48px; padding-bottom: 64px; }
+    .reviews-section { padding: 48px 0 56px; }
+    .review-grid { grid-template-columns: 1fr; }
+    .rf-row, .sub-pickers { grid-template-columns: 1fr; }
+    .reviews-header { flex-direction: column; gap: 16px; }
+    .bc-times { flex-direction: column; gap: 4px; }
+    .bf-input { font-size: 14px; padding: 10px 12px; }
+  }
+
+  /* Small phones */
+  @media (max-width: 400px) {
+    nav { padding: 12px; }
+    .page-wrap { padding: 0 12px; }
+    .hero { height: 60vh; min-height: 320px; }
+    .hero-title { font-size: 26px; }
+    .booking-card { padding: 18px 14px; }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-grid .g-main { grid-column: span 1; }
+    .gallery-thumb { aspect-ratio: 3/2; }
+  }
+
+  /* ── Bottom Navigation ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.3);
+    z-index: 2000;
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+  .bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: rgba(246,241,231,0.55); font-size: 10px; font-family: var(--body);
+    letter-spacing: 0.04em; text-decoration: none;
+    padding: 6px 8px; border-radius: 8px; transition: color 0.2s; min-width: 52px;
+  }
+  .bottom-nav a svg { width: 20px; height: 20px; }
+  .bottom-nav a:hover, .bottom-nav a.active { color: var(--ember-glow); }
+  .bottom-nav a.bn-book {
+    color: #fff; background: var(--ember);
+    border-radius: 10px; padding: 6px 12px;
+  }
+  .bottom-nav a.bn-book:hover { background: var(--ember-glow); }
+  @media (min-width: 768px) { .bottom-nav { display: none !important; } }
+  @media (max-width: 640px) {
+    body { padding-bottom: 72px; }
+    .bottom-nav { display: block; }
   }
 </style>
 </head>
@@ -511,19 +682,16 @@
 {{-- ── NAV ── --}}
 <nav>
   <a href="{{ url('/') }}" class="brand">
-    @php
-      $logoFile = collect(['logo.png','logo.svg','logo.jpg','logo.webp'])
-        ->first(fn($f) => file_exists(public_path("images/{$f}")));
-    @endphp
-    @if($logoFile)
-      <img src="{{ asset('images/' . $logoFile) }}" alt="Winsome Hotel" class="brand-logo">
-    @else
-      <span style="font-family:var(--display);font-size:22px;font-weight:400;letter-spacing:-0.01em;color:var(--cream);">Winsome</span>
-    @endif
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="brand-logo">
+    <div class="brand-text">
+      <span class="brand-name">Winsome Hotel</span>
+      <span class="brand-tagline">Charm, Luxury, Comfort</span>
+    </div>
   </a>
   <ul>
     <li><a href="{{ url('/') }}#rooms">Rooms</a></li>
     <li><a href="{{ url('/') }}#about">About</a></li>
+    <li><a href="{{ route('location') }}">Location</a></li>
     <li><a href="{{ url('/') }}#contact">Contact</a></li>
     <li><a href="#reserve" class="nav-cta">Reserve</a></li>
   </ul>
@@ -634,11 +802,28 @@
         @endif
         <div class="specs-row">
           <span class="specs-label">Rate</span>
-          <span class="specs-value" style="color:var(--ember-glow);">${{ number_format($room->price_per_night, 0) }} / night</span>
+          <span class="specs-value" style="color:var(--ember-glow);">
+            ${{ number_format($room->price_per_night, 0) }} / night
+            @if($room->price_per_night_tzs)
+              <span class="price-tzs">TZS {{ number_format($room->price_per_night_tzs, 0) }}</span>
+            @endif
+          </span>
         </div>
         <div class="specs-row">
-          <span class="specs-label">Check-in / out</span>
-          <span class="specs-value">2:00 PM / 11:00 AM</span>
+          <span class="specs-label">Check-in</span>
+          <span class="specs-value">From 1:30 PM</span>
+        </div>
+        <div class="specs-row">
+          <span class="specs-label">Check-out</span>
+          <span class="specs-value">By 10:30 PM</span>
+        </div>
+        <div class="specs-row specs-row--full">
+          <span class="specs-label">Cancellation</span>
+          <div class="cancel-policy">
+            <div class="cp-row"><span class="cp-days">7+ days before</span><span class="cp-badge cp-full">100% refund</span></div>
+            <div class="cp-row"><span class="cp-days">3 – 6 days before</span><span class="cp-badge cp-half">50% refund</span></div>
+            <div class="cp-row"><span class="cp-days">Under 3 days</span><span class="cp-badge cp-none">No refund</span></div>
+          </div>
         </div>
       </div>
 
@@ -647,7 +832,12 @@
     {{-- RIGHT: Booking sidebar --}}
     <div id="reserve">
       <div class="booking-card">
-        <div class="price-display">${{ number_format($room->price_per_night, 0) }}<small>/ night</small></div>
+        <div class="price-display">
+          ${{ number_format($room->price_per_night, 0) }}<small>/ night</small>
+          @if($room->price_per_night_tzs)
+            <span class="price-tzs">TZS {{ number_format($room->price_per_night_tzs, 0) }}</span>
+          @endif
+        </div>
         <p class="price-note">No payment required at this stage</p>
         <hr class="booking-divider">
 
@@ -667,6 +857,23 @@
 
           <label class="bf-label">Check-out</label>
           <input type="date" name="check_out" id="co" value="{{ old('check_out') }}" required class="bf-input">
+
+          {{-- Availability calendar --}}
+          <div class="avail-wrap">
+            <div class="avail-notice" id="avail-notice"></div>
+            <div class="cal-widget">
+              <div class="cal-nav">
+                <button type="button" onclick="calPrev()">&#8249;</button>
+                <span class="cal-month-label" id="cal-label"></span>
+                <button type="button" onclick="calNext()">&#8250;</button>
+              </div>
+              <div class="cal-grid" id="cal-grid"></div>
+              <div class="cal-legend">
+                <span><i class="leg-booked"></i> Already booked</span>
+                <span><i class="leg-sel"></i> Your selection</span>
+              </div>
+            </div>
+          </div>
 
           <div class="bf-row">
             <div>
@@ -706,6 +913,22 @@
           <button type="submit" class="btn-reserve">Request reservation →</button>
           <p class="booking-note">We'll confirm within 24 hours.</p>
         </form>
+
+        <div class="bc-policy">
+          <div class="bc-policy-title">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Cancellation Policy
+          </div>
+          <div class="bc-policy-rows">
+            <div class="bc-policy-row"><span>7+ days before</span><span class="bc-badge bc-full">100% refund</span></div>
+            <div class="bc-policy-row"><span>3 – 6 days before</span><span class="bc-badge bc-half">50% refund</span></div>
+            <div class="bc-policy-row"><span>Under 3 days</span><span class="bc-badge bc-none">No refund</span></div>
+          </div>
+          <div class="bc-times">
+            <span>Check-in: <strong>1:30 PM</strong></span>
+            <span>Check-out: <strong>10:30 PM</strong></span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -890,7 +1113,12 @@
             {{ implode(' · ', array_filter([$other->size_sqm, $other->bed_type])) }}
           </div>
           <div class="other-footer">
-            <div class="other-price">${{ number_format($other->price_per_night, 0) }}<small>/ night</small></div>
+            <div class="other-price">
+              ${{ number_format($other->price_per_night, 0) }}<small>/ night</small>
+              @if($other->price_per_night_tzs)
+                <span class="price-tzs">TZS {{ number_format($other->price_per_night_tzs, 0) }}</span>
+              @endif
+            </div>
             <span class="other-link">View room</span>
           </div>
         </div>
@@ -974,7 +1202,108 @@
       co.value = d.toISOString().split('T')[0];
     }
     co.min = new Date(new Date(this.value).getTime()+86400000).toISOString().split('T')[0];
+    renderCal(); checkAvailability();
   });
+  document.getElementById('co').addEventListener('change', function() {
+    renderCal(); checkAvailability();
+  });
+
+  // ── Availability calendar ──
+  var bookedRanges = [];
+  var calYear, calMonth;
+
+  (function() {
+    var now = new Date();
+    calYear  = now.getFullYear();
+    calMonth = now.getMonth();
+    fetch('{{ route('rooms.booked-dates', $room) }}')
+      .then(function(r){ return r.json(); })
+      .then(function(data){ bookedRanges = data; renderCal(); });
+    renderCal();
+  })();
+
+  function calPrev() {
+    calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCal();
+  }
+  function calNext() {
+    calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCal();
+  }
+
+  function dateStr(y, m, d) {
+    return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  }
+
+  function isBooked(y, m, d) {
+    var s = dateStr(y, m, d);
+    return bookedRanges.some(function(r){ return s >= r.from && s < r.to; });
+  }
+
+  function inSelectedRange(y, m, d) {
+    var ci = document.getElementById('ci').value;
+    var co = document.getElementById('co').value;
+    if (!ci || !co) return false;
+    var s = dateStr(y, m, d);
+    return s >= ci && s < co;
+  }
+
+  function isSelectedEdge(y, m, d) {
+    var ci = document.getElementById('ci').value;
+    var co = document.getElementById('co').value;
+    var s  = dateStr(y, m, d);
+    return s === ci || s === co;
+  }
+
+  function renderCal() {
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('cal-label').textContent = months[calMonth] + ' ' + calYear;
+
+    var grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    var dows = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    dows.forEach(function(d){ var el = document.createElement('div'); el.className='cal-dow'; el.textContent=d; grid.appendChild(el); });
+
+    var today   = new Date(); today.setHours(0,0,0,0);
+    var firstDow = new Date(calYear, calMonth, 1).getDay();
+    var daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+
+    for (var i = 0; i < firstDow; i++) {
+      var blank = document.createElement('div'); blank.className = 'cal-day empty'; grid.appendChild(blank);
+    }
+    for (var d = 1; d <= daysInMonth; d++) {
+      var el   = document.createElement('div');
+      var date = new Date(calYear, calMonth, d);
+      var cls  = 'cal-day';
+      if (date < today)                  cls += ' past';
+      else if (isSelectedEdge(calYear, calMonth, d)) cls += ' selected';
+      else if (inSelectedRange(calYear, calMonth, d)) cls += ' in-range';
+      else if (isBooked(calYear, calMonth, d))        cls += ' booked';
+      el.className  = cls;
+      el.textContent = d;
+      grid.appendChild(el);
+    }
+  }
+
+  function checkAvailability() {
+    var ci     = document.getElementById('ci').value;
+    var co     = document.getElementById('co').value;
+    var notice = document.getElementById('avail-notice');
+    var btn    = document.querySelector('.btn-reserve');
+    if (!ci || !co) { notice.className = 'avail-notice'; notice.textContent = ''; return; }
+
+    var conflict = bookedRanges.find(function(r){ return ci < r.to && co > r.from; });
+    if (conflict) {
+      var fmt = function(s){ var p=s.split('-'); var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return mn[parseInt(p[1])-1]+' '+parseInt(p[2])+', '+p[0]; };
+      notice.className = 'avail-notice conflict';
+      notice.innerHTML = '&#10007; This room is already booked from <strong>' + fmt(conflict.from) + '</strong> to <strong>' + fmt(conflict.to) + '</strong>. Please choose different dates.';
+      btn.disabled = true; btn.style.opacity = '0.4';
+    } else {
+      notice.className = 'avail-notice ok';
+      notice.innerHTML = '&#10003; These dates are available — go ahead and reserve!';
+      btn.disabled = false; btn.style.opacity = '';
+    }
+  }
 
   if (document.body.dataset.errors === '1') {
     document.getElementById('reserve').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -983,5 +1312,78 @@
     document.getElementById('write-review').scrollIntoView({ behavior:'smooth', block:'start' });
   }
 </script>
+
+<style>
+  .wa-float {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 58px; height: 58px;
+    background: #25d366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    z-index: 9999;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+  }
+  .wa-float svg { width: 30px; height: 30px; color: #fff; }
+  .wa-float:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(37,211,102,0.55); }
+  .wa-tooltip {
+    position: absolute;
+    right: 68px;
+    background: #0b1220;
+    color: #f6f1e7;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 6px 14px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .wa-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -6px; top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right: none;
+    border-left-color: #0b1220;
+  }
+  .wa-float:hover .wa-tooltip { opacity: 1; }
+  @media (max-width: 767px) { .wa-float { display: none !important; } }
+</style>
+
+<!-- BOTTOM NAV (mobile) -->
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="{{ url('/') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="{{ route('rooms.index') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Rooms
+    </a>
+    <a href="#reserve" class="bn-book">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reserve
+    </a>
+    <a href="{{ route('location') }}">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Location
+    </a>
+    <a href="https://wa.me/255793411998" target="_blank" rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="color:#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+      Chat
+    </a>
+  </div>
+</div>
+
+<a href="https://wa.me/255793411998" target="_blank" rel="noopener" class="wa-float" aria-label="Chat with us on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+  <span class="wa-tooltip">Chat with us</span>
+</a>
 </body>
 </html>
